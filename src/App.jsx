@@ -1,1128 +1,798 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { createRoot } from 'react-dom/client';
+import React, { useState, useEffect } from 'react';
 import { 
-  Book, 
+  Home, 
+  Hammer, 
+  Heart, 
   Shield, 
   Users, 
-  Target, 
-  Filter, 
-  Activity, 
-  Briefcase, 
-  BarChart2, 
-  CheckCircle, 
-  Download, 
-  ChevronRight, 
-  Info, 
-  Save, 
-  Activity as ActivityIcon,
-  Plus,
-  Trash2,
-  File,
-  FileText,
-  ClipboardCheck,
-  Menu,
+  TrendingUp, 
+  Lightbulb, 
+  BookOpen, 
+  Menu, 
   X,
-  User,
-  CheckSquare
+  ArrowRight,
+  CheckCircle,
+  AlertTriangle,
+  Leaf,
+  DollarSign,
+  Activity,
+  LayoutGrid,
+  Wrench,
+  Library,
+  GraduationCap,
+  Search,
+  Bell,
+  Settings,
+  ChevronRight,
+  MoreVertical,
+  FileText,
+  Calendar,
+  ExternalLink,
+  MessageSquare,
+  Clock,
+  Star,
+  Zap,
+  ClipboardCheck,
+  BarChart3,
+  Map,
+  Play
 } from 'lucide-react';
-import { initializeApp } from "firebase/app";
-import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot } from "firebase/firestore";
 
-// --- Firebase Configuration ---
-const firebaseConfig = JSON.parse(__firebase_config);
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+// --- VISUAL ASSETS (SVG Components) ---
 
-// --- Constants & Data Models ---
+// Framework Ring Diagram
+const FrameworkRingDiagram = () => (
+  <svg viewBox="0 0 600 600" className="w-full h-auto max-w-lg mx-auto filter drop-shadow-xl">
+    <defs>
+      <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+        <feOffset dx="2" dy="2" result="offsetblur" />
+        <feComponentTransfer>
+          <feFuncA type="linear" slope="0.3" />
+        </feComponentTransfer>
+        <feMerge>
+          <feMergeNode />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+    
+    {/* Outer Ring: Housing Solutions */}
+    <circle cx="300" cy="300" r="280" fill="#e6f5fa" stroke="#0099CC" strokeWidth="2" />
+    <path d="M 300 20 A 280 280 0 0 1 300 580" fill="none" stroke="#0099CC" strokeWidth="1" strokeDasharray="4 4" opacity="0.5" />
+    <text x="300" y="60" textAnchor="middle" className="font-bold text-sm fill-[#002F6C] uppercase tracking-widest">Integrated Housing Solutions</text>
+    <text x="500" y="300" textAnchor="middle" className="font-bold text-xs fill-[#0099CC]" transform="rotate(90, 500, 300)">Owner-Occupied Repairs</text>
+    <text x="100" y="300" textAnchor="middle" className="font-bold text-xs fill-[#0099CC]" transform="rotate(-90, 100, 300)">Acquisition Rehabs</text>
 
-const APP_VERSION = '1.3.1';
+    {/* Middle Ring: Strategic Pillars */}
+    <circle cx="300" cy="300" r="200" fill="white" stroke="#C4D600" strokeWidth="24" strokeOpacity="0.8" />
+    <text x="300" y="145" textAnchor="middle" className="font-bold text-xs fill-[#88888D]">Dwelling Safety</text>
+    <text x="300" y="465" textAnchor="middle" className="font-bold text-xs fill-[#88888D]">Home Performance</text>
+    <text x="460" y="305" textAnchor="middle" className="font-bold text-xs fill-[#88888D]">Occupant Health</text>
+    <text x="140" y="305" textAnchor="middle" className="font-bold text-xs fill-[#88888D]">Community Repair</text>
+    
+    {/* Inner Circle: Core Purpose */}
+    <circle cx="300" cy="300" r="120" fill="#002F6C" filter="url(#shadow)" />
+    <text x="300" y="290" textAnchor="middle" className="font-bold text-lg fill-white">STABILITY</text>
+    <text x="300" y="310" textAnchor="middle" className="font-bold text-sm fill-[#C4D600]">&</text>
+    <text x="300" y="330" textAnchor="middle" className="font-bold text-lg fill-white">RESILIENCE</text>
+  </svg>
+);
 
-const STEPS = [
-  { id: 'foundations', title: 'Setup', icon: Book, description: 'Org details and Key Staff' },
-  { id: 'compliance', title: 'Compliance', icon: CheckSquare, description: 'Policy 33 Alignment' },
-  { id: 'policyMap', title: 'Policy Map', icon: Shield, description: 'Distinguish Org vs. Program policies' },
-  { id: 'programModel', title: 'Program Model', icon: Users, description: 'Roles and responsibilities' },
-  { id: 'scope', title: 'Scope & Impact', icon: Target, description: 'Eligibility, caps, and exclusions' },
-  { id: 'screening', title: 'Client Screening', icon: Filter, description: 'Intake and prioritization' },
-  { id: 'lifecycle', title: 'Project Lifecycle', icon: Activity, description: 'Assessment to Closeout' },
-  { id: 'workforce', title: 'Workforce Strategy', icon: Briefcase, description: 'Contractors vs. Volunteers' },
-  { id: 'performance', title: 'Performance', icon: BarChart2, description: 'KPIs and Reporting' },
-  { id: 'export', title: 'Review & Export', icon: ClipboardCheck, description: 'Finalize and download' },
-];
+// Generational Wealth Chart
+const WealthChart = () => (
+  <svg viewBox="0 0 800 400" className="w-full h-full bg-white/5 rounded-xl p-4">
+    {/* Grid Lines */}
+    <line x1="50" y1="350" x2="750" y2="350" stroke="white" strokeWidth="2" opacity="0.5" /> 
+    <line x1="50" y1="50" x2="50" y2="350" stroke="white" strokeWidth="2" opacity="0.5" />
+    
+    {/* Areas */}
+    <path d="M 50 350 L 750 350 L 750 50 L 50 250 Z" fill="url(#gradientEquity)" opacity="0.3" />
 
-const VULNERABLE_GROUPS = [
-  { key: 'lmiHouseholds', label: 'LMI Households (≤80% AMI)', reason: 'Core target for HUD/funding; risk of deferred maintenance' },
-  { key: 'olderAdults', label: 'Older Adults (62+)', reason: 'Aging in place, fall risk, fixed income' },
-  { key: 'disabilities', label: 'People with Disabilities', reason: 'High ADL challenges, modification needs' },
-  { key: 'veterans', label: 'Veterans', reason: 'Displacement risk, targeted outreach needs' },
-  { key: 'raciallyMarginalized', label: 'Racially Marginalized Communities', reason: 'Historic disinvestment/redlining' },
-  { key: 'persistentPoverty', label: 'Persistent Poverty / Distressed', reason: 'Chronic disinvestment, economic hardship' },
-  { key: 'femaleHead', label: 'Female Head of Household', reason: 'Historical income disparity' },
-  { key: 'largeFamilies', label: 'Large Families (5+ members)', reason: 'Overcrowding, systems stress' },
-  { key: 'mobileHomeowners', label: 'Manufactured/Mobile Homeowners', reason: 'High substandard rates, energy burden' },
-  { key: 'ruralHouseholds', label: 'Rural Households', reason: 'Limited funding, workforce challenges' },
-  { key: 'disasterImpacted', label: 'Disaster-Impacted', reason: 'Structural damage, immediate displacement risk' }
-];
+    {/* Lines */}
+    <path d="M 50 100 C 200 120, 400 180, 600 350" fill="none" stroke="#A4343A" strokeWidth="4" strokeDasharray="8 4" />
+    <text x="60" y="90" fill="#A4343A" className="text-sm font-bold">DEBT (Liability)</text>
 
-const INITIAL_DATA = {
-  // Foundations
-  orgName: '',
-  orgAddress: '',
-  orgPhone: '',
-  orgEmail: '',
-  serviceArea: '',
-  existingPolicies: '', // Kept in model for backward compatibility, though UI removed
-  staff: [
-    { id: 1, name: '', title: 'Executive Director' },
-    { id: 2, name: '', title: 'Program Manager' }
-  ],
-  
-  // Compliance
-  policy33Aligned: false,
-  policy33Checklist: {
-    assessment: false,
-    partnerSelection: false,
-    participation: false,
-    staffing: false,
-    pricing: false,
-    constructionTypes: false,
-    sustainability: false,
-    risk: false,
-    safety: false,
-    codes: false,
-    agreements: false,
-    insurance: false
-  },
+    <path d="M 50 350 C 200 340, 400 200, 750 50" fill="none" stroke="#C4D600" strokeWidth="5" />
+    <text x="700" y="40" fill="#C4D600" className="text-sm font-bold">WEALTH (Asset)</text>
 
-  // Policy Map
-  policyMap: {
-    governance: 'org',
-    finance: 'org',
-    hr: 'org',
-    eligibility: 'program',
-    safety: 'both',
-    procurement: 'both',
-    recordKeeping: 'program'
-  },
+    {/* Markers */}
+    <circle cx="50" cy="350" r="6" fill="white" />
+    <text x="50" y="380" fill="white" textAnchor="middle" fontSize="12">Day 1</text>
+    <circle cx="250" cy="300" r="6" fill="white" />
+    <text x="250" y="380" fill="white" textAnchor="middle" fontSize="12">Yrs 5-15</text>
+    <circle cx="500" cy="150" r="6" fill="white" />
+    <text x="500" y="380" fill="white" textAnchor="middle" fontSize="12">Yrs 20-25</text>
+    <circle cx="750" cy="50" r="8" fill="#C4D600" stroke="white" strokeWidth="2" />
+    <text x="750" y="380" fill="white" textAnchor="middle" fontSize="12">Transfer</text>
 
-  // Program Model
-  roles: [
-    { id: 1, title: 'Program Manager', responsibilities: 'Overall execution, compliance, reporting', approves: ['SOW', 'Closeout'] },
-    { id: 2, title: 'Intake Coordinator', responsibilities: 'Client screening, document collection', approves: ['Eligibility'] },
-    { id: 3, title: 'Construction Lead', responsibilities: 'Scoping, QC, Contractor management', approves: ['Change Order'] }
-  ],
+    <defs>
+      <linearGradient id="gradientEquity" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0%" stopColor="#C4D600" stopOpacity="0" />
+        <stop offset="100%" stopColor="#C4D600" stopOpacity="0.5" />
+      </linearGradient>
+    </defs>
+  </svg>
+);
 
-  // Scope
-  repairTypes: {
-    critical: true,
-    accessibility: false,
-    energy: false,
-    exterior: false
-  },
-  financialCap: 15000,
-  exclusions: '',
 
-  // Client Screening (formerly Access)
-  intakeMethods: { phone: true, web: false, walkin: false },
-  priorityFactors: {
-    healthSafety: 5, // Defaulting standard factors
-    lmiHouseholds: 3,
-    olderAdults: 3
-  },
-  
-  // Lifecycle
-  stages: [
-    { id: 1, name: 'Inquiry & App', reqDoc: 'Application Form' },
-    { id: 2, name: 'Eligibility Review', reqDoc: 'Income Verification' },
-    { id: 3, name: 'Home Assessment', reqDoc: 'Inspection Report' },
-    { id: 4, name: 'SOW & Approval', reqDoc: 'Signed Agreement' },
-    { id: 5, name: 'Construction', reqDoc: 'Permits' },
-    { id: 6, name: 'Closeout', reqDoc: 'Satisfaction Survey' }
-  ],
+// --- CONTENT COMPONENTS ---
 
-  // Workforce
-  model: 'blended', // contractor, volunteer, blended
-  qcFrequency: 'milestone',
-
-  // Performance
-  kpis: {
-    homesServed: true,
-    avgCost: true,
-    repairTimeline: false,
-    clientSatisfaction: true,
-    safetyIncidents: false
-  },
-  reportingSchedule: 'monthly',
-  feedbackMechanism: '',
-
-  // Meta
-  version: '1.3.0',
-  lastUpdated: new Date().toISOString()
-};
-
-// --- Components ---
-
-const GuidePanel = ({ stepId }) => {
-  const guideContent = {
-    foundations: {
-      title: "Setting the Foundation",
-      text: "Start by defining your organization's boundaries. Providing accurate contact details ensures that the exported manual is ready for distribution to Board members or external partners. List the key staff members responsible for the program."
-    },
-    compliance: {
-      title: "Policy 33 Alignment",
-      text: "Per 'Policy 33: Home Repairs' (Section 2.1.1), your affiliate MUST operate consistent with a written, board-approved policy. The checklist on the left formalizes these requirements. You must address topics like 'Pricing and repayment model' and 'Risk management' explicitly in this manual."
-    },
-    policyMap: {
-      title: "Who Owns What?",
-      text: "This step is crucial to prevent 'Governance Bloat'. Policies are board-approved and change rarely. Procedures are staff-managed and change often. Mark 'Program' for things specific only to repairs (e.g., Lead Safety), and 'Org' for universal rules (e.g., Whistleblower)."
-    },
-    programModel: {
-      title: "Roles & Responsibilities",
-      text: "Avoid listing specific people. List roles. In smaller affiliates, one person might wear three hats (Program Manager + Construction Lead). Explicitly define who has 'signing authority' for money vs. who just recommends approval."
-    },
-    scope: {
-      title: "Define the 'No'",
-      text: "The most important part of Scope is what you WON'T do. Be specific about exclusions (e.g., 'No roof replacements over 2 stories', 'No mold remediation'). This protects your staff from scope creep."
-    },
-    screening: {
-      title: "Fair & Transparent",
-      text: "How do you decide who goes first? Funder requirements (like CDBG) usually mandate prioritizing lowest income or highest health risk. Use the checkboxes to select the specific vulnerable populations your program prioritizes, then weight them to create a defensible scoring matrix."
-    },
-    lifecycle: {
-      title: "The Project Pipeline",
-      text: "This is your operational heartbeat. Every project should move through these stages linearly. Ensure 'SOW Approval' happens BEFORE any hammer swings. Define exactly what document triggers the move to the next stage."
-    },
-    workforce: {
-      title: "Managing Labor",
-      text: "If you use volunteers, you need a waiver and safety training protocol. If you use contractors, you need insurance verification and lien waiver processes. A 'Blended' model is most common but requires the strictest controls."
-    },
-    performance: {
-      title: "Prove It Works",
-      text: "Don't measure everything. Measure what tells your story. 'Homes Served' is output. 'Aging in Place' is outcome. Ensure you have a feedback loop—how do you handle a homeowner complaint? Establishing clear KPIs now helps with future grant reporting."
-    },
-    export: {
-      title: "Ready for Approval",
-      text: "This export generates a draft for your Board or ED. It includes a version history log. Remember to update the 'Effective Date' once it is actually signed."
+const PlaybookContent = () => {
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  const content = guideContent[stepId] || { title: "Guidance", text: "Follow the prompts to complete this section." };
-
-  return (
-    <div className="bg-white border-l border-gray-200 p-6 h-full shadow-sm">
-      <div className="flex items-center mb-4">
-        <div className="bg-blue-100 p-2 rounded-full mr-3">
-          <Info className="w-5 h-5 text-blue-600" />
-        </div>
-        <h4 className="font-bold text-gray-800 text-sm uppercase tracking-wide">Best Practices</h4>
-      </div>
-      <h3 className="text-lg font-semibold text-blue-900 mb-3">{content.title}</h3>
-      <p className="text-sm text-gray-600 leading-relaxed">
-        {content.text}
-      </p>
-      
-      <div className="mt-8 pt-6 border-t border-gray-100">
-        <h5 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Key Reminders</h5>
-        <ul className="text-xs text-gray-500 space-y-2 list-disc pl-4">
-          <li>Keep policies broad, procedures specific.</li>
-          <li>Reference external docs (HR manual) instead of copying.</li>
-          <li>Ensure compliance with local building codes.</li>
-        </ul>
-      </div>
-    </div>
+  const SectionLink = ({ to, label }) => (
+    <button 
+      onClick={() => scrollToSection(to)}
+      className="text-xs font-semibold text-[#88888D] hover:text-[#0099CC] uppercase tracking-wider transition-colors"
+    >
+      {label}
+    </button>
   );
-};
-
-// --- Step Components ---
-
-const FoundationsStep = ({ data, onChange }) => {
-  const addStaff = () => {
-    const newStaff = { id: Date.now(), name: '', title: '' };
-    onChange('staff', [...(data.staff || []), newStaff]);
-  };
-
-  const updateStaff = (id, field, value) => {
-    const updated = data.staff.map(s => s.id === id ? { ...s, [field]: value } : s);
-    onChange('staff', updated);
-  };
-
-  const removeStaff = (id) => {
-    onChange('staff', data.staff.filter(s => s.id !== id));
-  };
 
   return (
-    <div className="space-y-8 max-w-4xl">
-      <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-6">
-        <h4 className="font-bold text-gray-900 border-b pb-2 mb-4">Organization Profile</h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="md:col-span-2">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Affiliate / Organization Name</label>
-            <input 
-              type="text" 
-              className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 border transition-all duration-200"
-              value={data.orgName}
-              onChange={(e) => onChange('orgName', e.target.value)}
-              placeholder="e.g. Habitat for Humanity of Springfield"
-            />
-          </div>
-          <div className="md:col-span-2">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Mailing Address</label>
-            <input 
-              type="text" 
-              className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 border transition-all duration-200"
-              value={data.orgAddress}
-              onChange={(e) => onChange('orgAddress', e.target.value)}
-              placeholder="e.g. 123 Main St, Springfield, IL 62704"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
-            <input 
-              type="text" 
-              className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 border transition-all duration-200"
-              value={data.orgPhone}
-              onChange={(e) => onChange('orgPhone', e.target.value)}
-              placeholder="(555) 123-4567"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
-            <input 
-              type="email" 
-              className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 border transition-all duration-200"
-              value={data.orgEmail}
-              onChange={(e) => onChange('orgEmail', e.target.value)}
-              placeholder="info@habitatspringfield.org"
-            />
-          </div>
-          <div className="md:col-span-2">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Service Area (Counties/Zips)</label>
-            <input 
-              type="text" 
-              className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 border transition-all duration-200"
-              value={data.serviceArea}
-              onChange={(e) => onChange('serviceArea', e.target.value)}
-              placeholder="e.g. Greene County and Northern Polk County"
-            />
-          </div>
-        </div>
+    <div className="bg-white min-h-screen">
+      {/* Internal Navigation for Playbook */}
+      <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-100 py-3 px-8 flex items-center justify-between shadow-sm">
+         <span className="text-sm font-bold text-[#002F6C]">Playbook Navigation</span>
+         <div className="flex space-x-6">
+            <SectionLink to="pb-home" label="Intro" />
+            <SectionLink to="pb-summary" label="Summary" />
+            <SectionLink to="pb-framework" label="Framework" />
+            <SectionLink to="pb-priorities" label="Priorities" />
+         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-        <h4 className="font-bold text-gray-900 mb-4 flex items-center border-b pb-2">
-            <User className="w-5 h-5 mr-2 text-blue-600"/> Key Staff Contacts
-        </h4>
-        <div className="space-y-3">
-            {(data.staff || []).map((staff) => (
-                <div key={staff.id} className="flex gap-3 items-center">
-                    <input 
-                        type="text" 
-                        className="flex-1 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 border"
-                        value={staff.name}
-                        onChange={(e) => updateStaff(staff.id, 'name', e.target.value)}
-                        placeholder="Staff Name"
-                    />
-                    <input 
-                        type="text" 
-                        className="flex-1 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 border"
-                        value={staff.title}
-                        onChange={(e) => updateStaff(staff.id, 'title', e.target.value)}
-                        placeholder="Job Title"
-                    />
-                    <button onClick={() => removeStaff(staff.id)} className="text-gray-400 hover:text-red-500 p-1">
-                        <Trash2 className="h-4 w-4" />
-                    </button>
-                </div>
-            ))}
-            <button onClick={addStaff} className="text-sm text-blue-600 font-medium hover:text-blue-700 flex items-center mt-2">
-                <Plus className="h-4 w-4 mr-1" /> Add Staff Member
-            </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const ComplianceStep = ({ data, onChange }) => {
-  const toggleCheck = (key) => {
-    const newChecklist = { ...data.policy33Checklist, [key]: !data.policy33Checklist[key] };
-    onChange('policy33Checklist', newChecklist);
-    
-    // Auto-update the summary boolean if all are true
-    const allChecked = Object.values(newChecklist).every(v => v);
-    onChange('policy33Aligned', allChecked);
-  };
-
-  const checklistItems = [
-    { key: 'assessment', label: 'Project assessment and selection criteria (2.1.1)' },
-    { key: 'partnerSelection', label: 'Partner selection criteria & process (2.1.1)' },
-    { key: 'participation', label: 'Homeowner participation requirements (2.1.1, 2.1.7)' },
-    { key: 'staffing', label: 'Staffing and volunteer participation (2.1.1)' },
-    { key: 'pricing', label: 'Pricing and repayment model (2.1.1)' },
-    { key: 'constructionTypes', label: 'Defined types of construction activities (2.1.1)' },
-    { key: 'sustainability', label: 'Financial sustainability plan (2.1.1)' },
-    { key: 'risk', label: 'Risk management policy (2.1.1)' },
-    { key: 'safety', label: 'Safety procedures (2.1.1, 3.5)' },
-    { key: 'codes', label: 'Compliance with building codes & industry standards (2.1.2)' },
-    { key: 'agreements', label: 'Written agreements executed before work (2.1.3)' },
-    { key: 'insurance', label: 'Adequate insurance coverage maintenance (2.1.8)' },
-  ];
-
-  return (
-    <div className="space-y-8 max-w-4xl">
-      <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-        <div className="bg-slate-50 px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <CheckSquare className="text-blue-600 w-5 h-5" />
-            <h3 className="font-bold text-gray-800">Policy 33 Compliance Checklist</h3>
+      {/* Hero Section */}
+      <section id="pb-home" className="relative pt-16 pb-20 overflow-hidden">
+        <div className="absolute inset-0 z-0 opacity-10 bg-[radial-gradient(#0099CC_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div className="max-w-5xl mx-auto px-6 relative z-10 text-center">
+          <div className="inline-block px-4 py-1.5 mb-6 rounded-full bg-[#e6f5fa] text-[#002F6C] font-semibold text-sm tracking-wide uppercase">
+            Stabilization & Resiliency
           </div>
-          <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${data.policy33Aligned ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}`}>
-            {data.policy33Aligned ? 'Compliant' : 'Incomplete'}
-          </span>
-        </div>
-        
-        <div className="p-6">
-          <p className="text-sm text-gray-600 mb-6">
-            Confirm that your manual addresses all mandatory requirements outlined in Policy 33.
+          <h1 className="text-4xl md:text-6xl font-black text-black mb-6 tracking-tight leading-tight">
+            Preserving Homes,<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0099CC] to-[#C4D600]">
+              Strengthening Communities.
+            </span>
+          </h1>
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-[#88888D] leading-relaxed">
+            A comprehensive playbook for Owner-Occupied Repairs and Vacant Housing Rehabilitation to ensure every family has a safe, stable place to live.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {checklistItems.map(item => (
-              <label key={item.key} className={`flex items-start space-x-3 p-3 rounded-lg border transition-all cursor-pointer ${data.policy33Checklist?.[item.key] ? 'bg-blue-50 border-blue-200' : 'hover:bg-gray-50 border-transparent'}`}>
-                <input
-                  type="checkbox"
-                  className="mt-1 focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded"
-                  checked={data.policy33Checklist?.[item.key] || false}
-                  onChange={() => toggleCheck(item.key)}
-                />
-                <span className={`text-sm leading-tight ${data.policy33Checklist?.[item.key] ? 'text-blue-800 font-medium' : 'text-gray-600'}`}>{item.label}</span>
-              </label>
+        </div>
+      </section>
+
+      {/* Executive Summary Section */}
+      <section id="pb-summary" className="py-16 bg-gray-50">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-[#002F6C] mb-4">Why Housing Preservation Matters</h2>
+            <div className="w-20 h-1 bg-[#C4D600] mx-auto rounded-full"></div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 items-stretch mb-16">
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -mr-6 -mt-6"></div>
+              <div className="relative z-10">
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-[#0099CC] mb-6">
+                  <Hammer size={20} />
+                </div>
+                <h3 className="text-xl font-bold text-black mb-3">Owner-Occupied Repairs</h3>
+                <p className="text-[#88888D] text-sm mb-4">
+                  Addressing the needs of homeowners who are already in place. Focuses on critical home systems, accessibility upgrades, and improvements.
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center text-xs text-[#88888D]">
+                    <CheckCircle size={14} className="text-[#C4D600] mr-2" /> Critical Home Repair
+                  </li>
+                  <li className="flex items-center text-xs text-[#88888D]">
+                    <CheckCircle size={14} className="text-[#C4D600] mr-2" /> Aging in Place
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-green-50 rounded-bl-full -mr-6 -mt-6"></div>
+              <div className="relative z-10">
+                <div className="w-10 h-10 bg-[#f4f7d1] rounded-lg flex items-center justify-center text-[#3AA047] mb-6">
+                  <Home size={20} />
+                </div>
+                <h3 className="text-xl font-bold text-black mb-3">Vacant Housing Rehabs</h3>
+                <p className="text-[#88888D] text-sm mb-4">
+                  Reviving distressed or abandoned properties to restore them to livable conditions. This creates new pathways to affordable homeownership.
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center text-xs text-[#88888D]">
+                    <CheckCircle size={14} className="text-[#0099CC] mr-2" /> Acquisition Rehabilitation
+                  </li>
+                  <li className="flex items-center text-xs text-[#88888D]">
+                    <CheckCircle size={14} className="text-[#0099CC] mr-2" /> Neighborhood Revitalization
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-[#002F6C] text-white p-6 rounded-xl text-center">
+              <div className="text-3xl font-black mb-1 text-[#C4D600]">$126.9B</div>
+              <p className="text-blue-100 text-xs font-medium uppercase tracking-wide">Repair Need</p>
+            </div>
+            <div className="bg-[#002F6C] text-white p-6 rounded-xl text-center">
+              <div className="text-3xl font-black mb-1 text-[#C4D600]">35 Million</div>
+              <p className="text-blue-100 text-xs font-medium uppercase tracking-wide">Homes at Risk</p>
+            </div>
+            <div className="bg-[#002F6C] text-white p-6 rounded-xl text-center">
+              <div className="text-3xl font-black mb-1 text-[#C4D600]">833%</div>
+              <p className="text-blue-100 text-xs font-medium uppercase tracking-wide">Growth in 10 Yrs</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* The Framework Section */}
+      <section id="pb-framework" className="py-16">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row gap-12">
+            <div className="md:w-1/2">
+              <h2 className="text-3xl font-bold text-[#002F6C] mb-2">5 Strategic Goals</h2>
+              <p className="text-[#88888D] mb-8">Guiding the network toward leadership.</p>
+              
+              <div className="space-y-3">
+                {[
+                  { title: "Centered", desc: "Housing Preservation as a Key Tool", color: "border-l-[#0099CC]" },
+                  { title: "Sustainable", desc: "Effective, Financially Sustainable Programming", color: "border-l-[#C4D600]" },
+                  { title: "Holistic", desc: "Consistent, Clear and Robust Connections", color: "border-l-[#0099CC]" },
+                  { title: "Innovative", desc: "Foster Innovation and Program Excellence", color: "border-l-[#C4D600]" },
+                  { title: "Influential", desc: "Move Intentionally Toward Thought Leadership", color: "border-l-[#0099CC]" },
+                ].map((goal, index) => (
+                  <div key={index} className={`bg-white p-4 rounded-lg shadow-sm border border-gray-100 border-l-4 ${goal.color}`}>
+                    <h4 className="font-bold text-[#002F6C] text-sm">{index + 1}. {goal.title}</h4>
+                    <p className="text-xs text-[#88888D] mt-1">{goal.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="md:w-1/2 flex flex-col items-center justify-center">
+              <div className="bg-white p-6 rounded-3xl shadow-lg border border-slate-100 w-full relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#0099CC] to-[#C4D600]"></div>
+                <h3 className="text-center text-lg font-bold text-[#002F6C] mb-6 uppercase tracking-wider">Strategic Framework</h3>
+                <FrameworkRingDiagram />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Key Priorities Section */}
+      <section id="pb-priorities" className="py-16 bg-[#000000] text-white">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <span className="text-[#C4D600] font-bold tracking-wider uppercase text-xs">Action Plan</span>
+            <h2 className="text-3xl font-black mt-2 text-white">6 Key Priorities</h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              { title: "1. Build Network Capacity", icon: <Users className="text-[#C4D600]" /> },
+              { title: "2. Sustainable Funding", icon: <DollarSign className="text-[#C4D600]" /> },
+              { title: "3. Disaster Programming", icon: <AlertTriangle className="text-[#C4D600]" /> },
+              { title: "4. Measure Housing Quality", icon: <Activity className="text-[#C4D600]" /> },
+              { title: "5. Center Targeted Outcomes", icon: <Heart className="text-[#C4D600]" /> },
+              { title: "6. Vacant Housing Needs", icon: <Home className="text-[#C4D600]" /> }
+            ].map((priority, i) => (
+              <div key={i} className="bg-[#222222] p-6 rounded-xl border border-[#444444] hover:border-[#C4D600] transition-all">
+                <div className="mb-3">{priority.icon}</div>
+                <h3 className="font-bold text-sm text-white">{priority.title}</h3>
+              </div>
             ))}
           </div>
+
+          <div className="mt-12 bg-gradient-to-r from-[#002F6C] to-[#004e7c] rounded-2xl p-8 relative overflow-hidden border border-[#0099CC]/30">
+            <div className="flex flex-col lg:flex-row gap-8 items-center">
+              <div className="lg:w-1/2">
+                <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                  <TrendingUp className="text-[#C4D600]" size={24} />
+                  Generational Wealth
+                </h3>
+                <p className="text-blue-100 text-sm mb-4">
+                  Affordable homeownership does not equal instant wealth. It requires time, consistency, and <strong>preservation</strong>.
+                </p>
+                <div className="flex gap-2">
+                  <span className="px-3 py-1 bg-white/10 rounded-full text-xs text-blue-100 border border-white/20">Debt</span>
+                  <span className="px-3 py-1 bg-white/10 rounded-full text-xs text-blue-100 border border-white/20">Equity</span>
+                  <span className="px-3 py-1 bg-[#C4D600]/20 text-[#C4D600] rounded-full text-xs border border-[#C4D600]/30">Wealth Transfer</span>
+                </div>
+              </div>
+              <div className="lg:w-1/2 w-full h-48">
+                 <WealthChart />
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
+    </div>
+  );
+};
+
+
+// --- PLACEHOLDER VIEWS ---
+
+// Updated SharePoint-style "Quick Link" Card
+const QuickLinkCard = ({ title, icon, color = "bg-[#0099CC]", onClick }) => (
+  <button 
+    onClick={onClick}
+    className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-[#0099CC] transition-all flex flex-col items-center justify-center gap-3 h-32 group"
+  >
+    <div className={`p-3 rounded-full ${color} text-white group-hover:scale-110 transition-transform`}>
+      {icon}
+    </div>
+    <span className="text-xs font-bold text-[#002F6C] text-center leading-tight">{title}</span>
+  </button>
+);
+
+// Updated SharePoint-style "News" Card
+const NewsCard = ({ title, date, category, imageColor, main = false }) => (
+  <div className={`bg-white rounded-lg border border-gray-100 overflow-hidden hover:shadow-md transition-shadow cursor-pointer flex ${main ? 'flex-col h-full' : 'flex-row h-24'}`}>
+    <div className={`${main ? 'h-48 w-full' : 'w-24 h-full'} ${imageColor} shrink-0 flex items-center justify-center`}>
+      <MessageSquare className="text-white opacity-20" size={main ? 48 : 24} />
+    </div>
+    <div className="p-4 flex flex-col justify-between flex-1">
+      <div>
+        <span className="text-[10px] font-bold text-[#0099CC] uppercase tracking-wide mb-1 block">{category}</span>
+        <h4 className={`font-bold text-[#002F6C] ${main ? 'text-lg' : 'text-sm line-clamp-2'}`}>{title}</h4>
+      </div>
+      <div className="flex items-center gap-2 mt-2">
+         <Clock size={12} className="text-gray-400" />
+         <span className="text-[10px] text-gray-400">{date}</span>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
-const PolicyMapStep = ({ data, onChange }) => {
-  const updateMap = (key, value) => {
-    onChange('policyMap', { ...data.policyMap, [key]: value });
-  };
-
-  const rows = [
-    { key: 'governance', label: 'Governance & Board Structure' },
-    { key: 'finance', label: 'Financial Management' },
-    { key: 'hr', label: 'HR & Personnel' },
-    { key: 'eligibility', label: 'Client Eligibility Criteria' },
-    { key: 'safety', label: 'Worksite Safety' },
-    { key: 'procurement', label: 'Contractor Procurement' },
-    { key: 'recordKeeping', label: 'Record Keeping' },
-  ];
-
-  return (
-    <div className="border border-gray-200 rounded-xl overflow-hidden shadow-sm bg-white">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-slate-50">
-          <tr>
-            <th className="py-4 pl-6 pr-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Category</th>
-            <th className="px-3 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Org Level</th>
-            <th className="px-3 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Program Level</th>
-            <th className="px-3 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Both</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-100 bg-white">
-          {rows.map((row) => (
-            <tr key={row.key} className="hover:bg-slate-50 transition-colors">
-              <td className="py-4 pl-6 pr-3 text-sm font-medium text-gray-900">{row.label}</td>
-              <td className="px-3 py-4 text-center">
-                <input type="radio" name={row.key} className="text-blue-600 focus:ring-blue-500" checked={data.policyMap[row.key] === 'org'} onChange={() => updateMap(row.key, 'org')} />
-              </td>
-              <td className="px-3 py-4 text-center">
-                <input type="radio" name={row.key} className="text-blue-600 focus:ring-blue-500" checked={data.policyMap[row.key] === 'program'} onChange={() => updateMap(row.key, 'program')} />
-              </td>
-              <td className="px-3 py-4 text-center">
-                <input type="radio" name={row.key} className="text-blue-600 focus:ring-blue-500" checked={data.policyMap[row.key] === 'both'} onChange={() => updateMap(row.key, 'both')} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+// Updated "Document" Row
+const DocumentRow = ({ name, modified, author, icon }) => (
+  <div className="flex items-center p-3 hover:bg-blue-50/50 rounded-lg cursor-pointer group transition-colors border-b border-gray-50 last:border-0">
+    <div className="p-2 bg-gray-100 rounded text-gray-500 group-hover:bg-[#0099CC] group-hover:text-white transition-colors mr-3">
+      {icon}
     </div>
-  );
-};
+    <div className="flex-1 min-w-0">
+      <p className="text-sm font-medium text-gray-900 truncate group-hover:text-[#0099CC]">{name}</p>
+      <p className="text-xs text-gray-500">Modified by {author}</p>
+    </div>
+    <span className="text-xs text-gray-400 whitespace-nowrap ml-4">{modified}</span>
+  </div>
+);
 
-const ProgramModelStep = ({ data, onChange }) => {
-  const addRole = () => {
-    const newRole = { id: Date.now(), title: 'New Role', responsibilities: '', approves: [] };
-    onChange('roles', [...data.roles, newRole]);
-  };
-
-  const updateRole = (id, field, value) => {
-    const updated = data.roles.map(r => r.id === id ? { ...r, [field]: value } : r);
-    onChange('roles', updated);
-  };
-
-  const removeRole = (id) => {
-    onChange('roles', data.roles.filter(r => r.id !== id));
-  };
-
-  return (
-    <div className="space-y-4">
-      {data.roles.map((role) => (
-        <div key={role.id} className="relative rounded-xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
-          <div className="absolute top-4 right-4">
-            <button onClick={() => removeRole(role.id)} className="text-gray-400 hover:text-red-500 p-1">
-              <Trash2 className="h-4 w-4" />
-            </button>
+const HomeView = ({ onNavigate }) => (
+  <div className="bg-gray-50/50 min-h-full pb-12">
+    
+    {/* HERO SECTION - SharePoint Style */}
+    <div className="relative bg-[#002F6C] h-64 w-full overflow-hidden shrink-0">
+       {/* Abstract background elements */}
+       <div className="absolute inset-0 bg-gradient-to-r from-[#002F6C] via-[#002F6C] to-[#0099CC] opacity-90"></div>
+       <div className="absolute -right-20 -top-20 w-96 h-96 bg-[#C4D600] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+       <div className="absolute left-10 bottom-0 w-64 h-64 bg-[#0099CC] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+       
+       <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex flex-col justify-center">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="px-2 py-0.5 rounded bg-[#C4D600] text-[#002F6C] text-[10px] font-bold uppercase tracking-wide">Internal Portal</span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Role Title</label>
-              <input 
-                type="text" 
-                className="block w-full border-0 border-b-2 border-gray-100 focus:border-blue-500 focus:ring-0 px-0 py-2 text-gray-900 font-medium placeholder-gray-300 transition-colors bg-transparent"
-                value={role.title}
-                onChange={(e) => updateRole(role.id, 'title', e.target.value)}
-                placeholder="Enter title"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Key Responsibilities</label>
-              <input 
-                type="text" 
-                className="block w-full border-0 border-b-2 border-gray-100 focus:border-blue-500 focus:ring-0 px-0 py-2 text-gray-900 placeholder-gray-300 transition-colors bg-transparent"
-                value={role.responsibilities}
-                onChange={(e) => updateRole(role.id, 'responsibilities', e.target.value)}
-                placeholder="Enter responsibilities"
-              />
-            </div>
-          </div>
-          <div className="mt-4 pt-4 border-t border-gray-50 flex items-center text-sm text-gray-500">
-            <span className="font-medium mr-2">Authority:</span>
-            {role.approves.length > 0 ? (
-               <div className="flex gap-2">
-                 {role.approves.map(a => <span key={a} className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-xs">{a}</span>)}
-               </div>
-            ) : <span className="text-gray-400 italic">No specific approval authority defined</span>}
-          </div>
+          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">Good Morning, Affiliate Leader</h1>
+          <p className="text-blue-100 max-w-2xl text-base md:text-lg font-light">
+            Welcome to the PreservationHub. Access your tools, track network news, and align with the national housing preservation strategy.
+          </p>
+       </div>
+    </div>
+
+    {/* MAIN CONTENT CONTAINER */}
+    <div className="max-w-7xl mx-auto px-6 -mt-8 relative z-20 space-y-8">
+      
+      {/* QUICK LAUNCH - SharePoint Style Tiles */}
+      <section>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+           <QuickLinkCard title="New Repair Project" icon={<Hammer size={24} />} onClick={() => {}} />
+           <QuickLinkCard title="Intake Portal" icon={<Users size={24} />} color="bg-[#C4D600]" onClick={() => {}} />
+           <QuickLinkCard title="Funding Status" icon={<DollarSign size={24} />} onClick={() => {}} />
+           <QuickLinkCard title="Safety Checklist" icon={<Shield size={24} />} color="bg-[#E55025]" onClick={() => {}} />
+           <QuickLinkCard title="Policy Library" icon={<Library size={24} />} onClick={() => {}} />
+           <QuickLinkCard title="My Tasks" icon={<CheckCircle size={24} />} color="bg-[#3AA047]" onClick={() => {}} />
         </div>
-      ))}
-      <button onClick={addRole} className="w-full flex justify-center items-center py-4 border-2 border-dashed border-gray-300 rounded-xl text-sm font-semibold text-gray-500 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-all">
-        <Plus className="h-5 w-5 mr-2" /> Add New Role
+      </section>
+
+      {/* TWO COLUMN LAYOUT */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+         
+         {/* LEFT COLUMN (News & Docs) */}
+         <div className="lg:col-span-2 space-y-8">
+            
+            {/* NEWS FEED */}
+            <section>
+               <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[#002F6C] font-bold text-lg flex items-center gap-2">
+                     <Star size={18} className="text-[#C4D600]" fill="#C4D600" /> Network News
+                  </h3>
+                  <a href="#" className="text-xs text-[#0099CC] font-bold hover:underline">See All</a>
+               </div>
+               
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-auto md:h-64">
+                  {/* Hero News Item */}
+                  <NewsCard 
+                     main={true}
+                     title="New 'Aging in Place' Grant Funding Available for FY26"
+                     category="Funding Alert"
+                     date="Today, 9:00 AM"
+                     imageColor="bg-[#002F6C]"
+                  />
+                  {/* Side News Items */}
+                  <div className="flex flex-col gap-4 h-full">
+                     <NewsCard 
+                        title="Affiliate Spotlight: How Austin Habitat Reduced Repair Costs by 15%"
+                        category="Best Practices"
+                        date="Yesterday"
+                        imageColor="bg-[#0099CC]"
+                     />
+                     <NewsCard 
+                        title="Updated Safety Protocols for Lead Hazard Control Effective Immediately"
+                        category="Compliance"
+                        date="Oct 24"
+                        imageColor="bg-[#E55025]"
+                     />
+                  </div>
+               </div>
+            </section>
+            
+            {/* RECENT DOCUMENTS */}
+             <section className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+               <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-[#002F6C] font-bold text-lg">Recent Documents</h3>
+                  <div className="flex gap-2">
+                     <button className="p-1 hover:bg-gray-100 rounded text-[#88888D]"><Settings size={16}/></button>
+                  </div>
+               </div>
+               <div className="flex flex-col">
+                  <DocumentRow name="Q3_Impact_Report_Draft_v2.pdf" modified="2h ago" author="You" icon={<FileText size={18} />} />
+                  <DocumentRow name="Project_104_Budget_Estimation.xlsx" modified="5h ago" author="Mike R." icon={<DollarSign size={18} />} />
+                  <DocumentRow name="Homeowner_Agreement_Template_2025.docx" modified="1d ago" author="Sarah M." icon={<FileText size={18} />} />
+                  <DocumentRow name="Site_Safety_Inspection_Log.pdf" modified="2d ago" author="John D." icon={<Shield size={18} />} />
+               </div>
+               <button className="w-full mt-4 py-2 text-xs text-[#0099CC] font-bold hover:bg-blue-50 rounded transition-colors">
+                  View All Documents
+               </button>
+            </section>
+         </div>
+
+         {/* RIGHT COLUMN (Events & Contacts) */}
+         <div className="space-y-8">
+            
+            {/* UPCOMING EVENTS */}
+            <section className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+               <h3 className="text-[#002F6C] font-bold text-lg mb-4">Upcoming Events</h3>
+               <div className="space-y-4">
+                  {[
+                     { day: "28", month: "OCT", title: "Regional Repair Summit", time: "10:00 AM - 2:00 PM" },
+                     { day: "02", month: "NOV", title: "Grant Writing Workshop", time: "1:00 PM - 3:00 PM" },
+                     { day: "15", month: "NOV", title: "Quarterly Safety Review", time: "9:00 AM - 10:30 AM" },
+                  ].map((evt, i) => (
+                     <div key={i} className="flex gap-4 items-start group cursor-pointer">
+                        <div className="flex flex-col items-center bg-blue-50 rounded-lg p-2 w-14 shrink-0 group-hover:bg-[#0099CC] group-hover:text-white transition-colors">
+                           <span className="text-[10px] font-bold uppercase">{evt.month}</span>
+                           <span className="text-xl font-black text-[#002F6C] group-hover:text-white">{evt.day}</span>
+                        </div>
+                        <div>
+                           <h4 className="font-bold text-sm text-gray-900 group-hover:text-[#0099CC] transition-colors">{evt.title}</h4>
+                           <p className="text-xs text-gray-500 mt-1">{evt.time}</p>
+                        </div>
+                     </div>
+                  ))}
+               </div>
+               <button className="w-full mt-6 py-2 border border-gray-200 rounded text-xs font-bold text-gray-600 hover:border-[#0099CC] hover:text-[#0099CC] transition-colors">
+                  Open Calendar
+               </button>
+            </section>
+
+             {/* MY SITES / PROJECTS */}
+            <section className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+               <h3 className="text-[#002F6C] font-bold text-lg mb-4">Pinned Projects</h3>
+               <div className="space-y-3">
+                  {[
+                     { name: "Greenwood Revitalization", status: "Active" },
+                     { name: "Veteran Home Repair Initiative", status: "Planning" },
+                     { name: "2025 Weatherization Blitz", status: "On Hold" }
+                  ].map((proj, i) => (
+                     <div key={i} className="flex items-center justify-between p-2 hover:bg-gray-50 rounded cursor-pointer group">
+                        <div className="flex items-center gap-3">
+                           <div className="w-2 h-2 rounded-full bg-[#C4D600]"></div>
+                           <span className="text-sm font-medium text-gray-700 group-hover:text-[#0099CC]">{proj.name}</span>
+                        </div>
+                        <ExternalLink size={14} className="text-gray-300 group-hover:text-[#0099CC]" />
+                     </div>
+                  ))}
+               </div>
+            </section>
+
+            {/* HELP CARD */}
+            <div className="bg-[#e6f5fa] rounded-xl p-6 border border-blue-100">
+               <h4 className="font-bold text-[#002F6C] mb-2">Need Help?</h4>
+               <p className="text-xs text-blue-800 mb-4">
+                  Contact the Affiliate Support Center or browse the Knowledge Base for tutorials.
+               </p>
+               <button className="text-xs font-bold text-[#0099CC] hover:underline">Contact Support &rarr;</button>
+            </div>
+
+         </div>
+      </div>
+    </div>
+  </div>
+);
+
+// --- APP CARD COMPONENT ---
+const AppCard = ({ title, category, version, icon, color, description, isNew = false }) => (
+  <div className="bg-white rounded-xl border border-gray-200 hover:border-[#0099CC] hover:shadow-lg transition-all group overflow-hidden flex flex-col h-full">
+    {/* Colored Header Strip */}
+    <div className={`h-2 w-full ${color}`}></div>
+    
+    <div className="p-6 flex flex-col h-full">
+      <div className="flex justify-between items-start mb-4">
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white ${color} shadow-sm group-hover:scale-110 transition-transform`}>
+           {icon}
+        </div>
+        {isNew && (
+           <span className="px-2 py-1 bg-[#C4D600] text-[#002F6C] text-[10px] font-bold uppercase rounded-full">New</span>
+        )}
+      </div>
+      
+      <div className="mb-4 flex-1">
+         <div className="flex items-center justify-between mb-1">
+            <span className="text-[10px] font-bold text-[#88888D] uppercase tracking-wide">{category}</span>
+            <span className="text-[10px] font-mono text-gray-400">{version}</span>
+         </div>
+         <h3 className="text-lg font-bold text-[#002F6C] mb-2 group-hover:text-[#0099CC] transition-colors">{title}</h3>
+         <p className="text-sm text-[#88888D] leading-relaxed line-clamp-2">
+            {description}
+         </p>
+      </div>
+
+      <button className={`w-full py-2.5 rounded-lg font-bold text-sm text-white ${color} hover:opacity-90 transition-opacity flex items-center justify-center gap-2 mt-auto`}>
+         Launch App <Play size={14} fill="currentColor" />
       </button>
     </div>
-  );
-};
+  </div>
+);
 
-const ScopeStep = ({ data, onChange }) => (
-  <div className="space-y-8">
-    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-      <h4 className="font-bold text-gray-900 mb-4 flex items-center">
-        <Target className="w-5 h-5 mr-2 text-blue-600"/> Included Repairs
-      </h4>
-      <div className="grid grid-cols-2 gap-4">
-        {Object.keys(data.repairTypes).map(type => (
-          <label key={type} className={`flex items-center space-x-3 p-3 rounded-lg border cursor-pointer transition-all ${data.repairTypes[type] ? 'bg-blue-50 border-blue-200' : 'hover:bg-gray-50 border-gray-100'}`}>
-            <input 
-              type="checkbox"
-              className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-              checked={data.repairTypes[type]}
-              onChange={(e) => onChange('repairTypes', { ...data.repairTypes, [type]: e.target.checked })}
-            />
-            <span className="text-sm font-medium capitalize text-gray-800">{type.replace(/([A-Z])/g, ' $1').trim()}</span>
-          </label>
-        ))}
+const AppsView = () => (
+  <div className="p-8 bg-gray-50/50 min-h-full">
+    <div className="mb-8 flex items-end justify-between">
+      <div>
+         <h1 className="text-2xl font-bold text-[#002F6C]">Apps & Tools</h1>
+         <p className="text-[#88888D] text-sm mt-1">Operational tools to manage your preservation programs.</p>
+      </div>
+      <div className="flex gap-2">
+         <button className="p-2 bg-white border border-gray-200 rounded hover:text-[#0099CC]"><LayoutGrid size={18}/></button>
+         <button className="p-2 bg-white border border-gray-200 rounded hover:text-[#0099CC]"><MoreVertical size={18}/></button>
       </div>
     </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-2">Financial Cap per Project</label>
-        <div className="relative rounded-lg shadow-sm">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <span className="text-gray-500 sm:text-sm font-bold">$</span>
-            </div>
-            <input 
-            type="number" 
-            className="focus:ring-blue-500 focus:border-blue-500 block w-full pl-8 pr-12 py-3 sm:text-lg border-gray-300 rounded-lg border font-mono" 
-            placeholder="0.00"
-            value={data.financialCap}
-            onChange={(e) => onChange('financialCap', e.target.value)}
-            />
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-            <span className="text-gray-400 sm:text-sm">USD</span>
-            </div>
-        </div>
-        </div>
-
-        <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-2">Explicit Exclusions</label>
-        <textarea 
-            className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-3 border h-[120px] resize-none"
-            value={data.exclusions}
-            onChange={(e) => onChange('exclusions', e.target.value)}
-            placeholder="e.g., Foundation repair, Mold remediation..."
-        />
-        </div>
+    
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <AppCard 
+         title="P&P Builder" 
+         category="Governance" 
+         version="v1.0" 
+         icon={<FileText size={24} />} 
+         color="bg-[#0099CC]"
+         description="Easily build and generate customized Policies and Procedures manuals to structure your program."
+      />
+      <AppCard 
+         title="Repairs Catalog Builder" 
+         category="Operations" 
+         version="v1.0" 
+         icon={<BookOpen size={24} />} 
+         color="bg-[#002F6C]"
+         description="Create a comprehensive catalog defining your program's specific eligible and non-eligible repair interventions."
+      />
+      <AppCard 
+         title="Readiness Assessment" 
+         category="Strategy" 
+         version="New" 
+         icon={<Zap size={24} />} 
+         color="bg-[#E55025]"
+         description="A pre-launch evaluation designed to determine a nonprofit's readiness to start a new home repair program."
+         isNew={true}
+      />
+      <AppCard 
+         title="Foundations Assessment" 
+         category="Development" 
+         version="v1.0" 
+         icon={<Hammer size={24} />} 
+         color="bg-[#C4D600]"
+         description="Assess early program development efforts, focusing on essential programmatic foundations and pre-operational requirements."
+      />
+      <AppCard 
+         title="Operations Assessment" 
+         category="Efficiency" 
+         version="v2.1" 
+         icon={<Activity size={24} />} 
+         color="bg-[#3AA047]"
+         description="Measure the efficiency of internal processes and systems during active program delivery to optimize operations."
+      />
+      <AppCard 
+         title="Support Systems Assessment" 
+         category="Sustainability" 
+         version="v2.0" 
+         icon={<BarChart3 size={24} />} 
+         color="bg-[#A4343A]"
+         description="An advanced tool for mature programs to evaluate systems crucial for long-term sustainability and outcomes."
+      />
     </div>
   </div>
 );
 
-const ClientScreeningStep = ({ data, onChange }) => {
-  const getLabel = (key) => {
-    if (key === 'healthSafety') return 'Health & Safety Urgency (Home Condition)';
-    const group = VULNERABLE_GROUPS.find(g => g.key === key);
-    return group ? group.label : key.replace(/([A-Z])/g, ' $1').trim();
-  };
-
-  const toggleGroup = (key) => {
-    const newFactors = { ...data.priorityFactors };
-    if (newFactors[key] !== undefined) {
-      delete newFactors[key];
-    } else {
-      newFactors[key] = 3; // Default weight
-    }
-    onChange('priorityFactors', newFactors);
-  };
-
-  return (
-    <div className="space-y-8">
-      <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-        <h4 className="font-bold text-gray-900 mb-4">Intake Channels</h4>
-        <div className="flex flex-wrap gap-4">
-          {['phone', 'web', 'walkin'].map(channel => (
-            <label key={channel} className={`flex items-center space-x-3 px-4 py-3 rounded-lg border cursor-pointer transition-all ${data.intakeMethods[channel] ? 'bg-blue-50 border-blue-500 ring-1 ring-blue-500' : 'bg-white border-gray-200 hover:border-gray-300'}`}>
-              <input 
-                type="checkbox" 
-                checked={data.intakeMethods[channel]}
-                onChange={(e) => onChange('intakeMethods', { ...data.intakeMethods, [channel]: e.target.checked })}
-                className="rounded text-blue-600 focus:ring-blue-500 h-5 w-5"
-              />
-              <span className="capitalize text-sm font-medium text-gray-700">{channel === 'walkin' ? 'Walk-in' : channel}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-        <div className="mb-6">
-            <h4 className="font-bold text-gray-900 mb-2">Target Populations</h4>
-            <p className="text-sm text-gray-500">Select the specific vulnerable groups your program prioritizes.</p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
-          {VULNERABLE_GROUPS.map(group => (
-            <label key={group.key} className={`flex items-start space-x-3 p-3 rounded-lg border cursor-pointer transition-all ${data.priorityFactors[group.key] !== undefined ? 'bg-blue-50 border-blue-200' : 'hover:bg-slate-50 border-transparent'}`}>
-               <input 
-                 type="checkbox"
-                 className="mt-1 rounded text-blue-600 focus:ring-blue-500 h-4 w-4"
-                 checked={data.priorityFactors[group.key] !== undefined}
-                 onChange={() => toggleGroup(group.key)}
-               />
-               <div>
-                 <div className={`text-sm font-medium ${data.priorityFactors[group.key] !== undefined ? 'text-blue-900' : 'text-gray-700'}`}>{group.label}</div>
-                 <div className="text-xs text-gray-500 mt-0.5">{group.reason}</div>
-               </div>
-            </label>
-          ))}
-        </div>
-
-        <div className="border-t border-gray-100 pt-6">
-          <h4 className="font-bold text-gray-900 mb-4">Prioritization Matrix Weights (1-5)</h4>
-          
-          <div className="space-y-6">
-            <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                <div className="flex justify-between items-center mb-2">
-                <span className="font-bold text-gray-800 text-sm">Health & Safety Urgency</span>
-                <span className="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">{data.priorityFactors.healthSafety || 5}</span>
-                </div>
-                <input 
-                type="range" 
-                min="1" 
-                max="5" 
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-                value={data.priorityFactors.healthSafety || 5}
-                onChange={(e) => onChange('priorityFactors', { ...data.priorityFactors, healthSafety: parseInt(e.target.value) })}
-                />
-                <div className="flex justify-between text-xs text-gray-400 mt-1">
-                    <span>Low Priority</span>
-                    <span>Critical</span>
-                </div>
+const ResourcesView = () => (
+  <div className="p-8 bg-gray-50/50 min-h-full">
+    <div className="mb-8">
+      <h1 className="text-2xl font-bold text-[#002F6C]">Resource Library</h1>
+      <p className="text-[#88888D] text-sm">Templates, guides, and policy documents.</p>
+    </div>
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      <div className="grid grid-cols-1 divide-y divide-gray-100">
+        {[
+          { title: 'Policy 33 Compliance Guide', type: 'PDF Document', date: 'Oct 24, 2025' },
+          { title: 'Repair Master Services Agreement', type: 'DOCX Template', date: 'Sep 12, 2025' },
+          { title: 'Homeowner Intake Form', type: 'Fillable PDF', date: 'Aug 05, 2025' },
+          { title: 'Safety Manual: Lead & Asbestos', type: 'Training Module', date: 'Jul 22, 2025' },
+          { title: 'Grant Writing Boilerplate', type: 'Text Snippets', date: 'Jun 15, 2025' },
+        ].map((res, i) => (
+          <div key={i} className="p-4 hover:bg-gray-50 flex items-center justify-between group cursor-pointer transition-colors">
+            <div className="flex items-center gap-4">
+              <div className="p-2 bg-gray-100 rounded-lg text-[#88888D] group-hover:bg-blue-50 group-hover:text-[#0099CC] transition-colors">
+                <Library size={20} />
+              </div>
+              <div>
+                <p className="font-medium text-black text-sm group-hover:text-[#0099CC]">{res.title}</p>
+                <p className="text-xs text-[#88888D]">{res.type}</p>
+              </div>
             </div>
-
-            {Object.keys(data.priorityFactors).filter(k => k !== 'healthSafety').map(factor => (
-                <div key={factor}>
-                <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium text-gray-700 capitalize">{getLabel(factor)}</span>
-                    <span className="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded">{data.priorityFactors[factor]}</span>
-                </div>
-                <input 
-                    type="range" 
-                    min="1" 
-                    max="5" 
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-                    value={data.priorityFactors[factor]}
-                    onChange={(e) => onChange('priorityFactors', { ...data.priorityFactors, [factor]: parseInt(e.target.value) })}
-                />
-                </div>
-            ))}
+            <div className="flex items-center gap-4">
+              <span className="text-xs text-[#88888D]">{res.date}</span>
+              <ChevronRight size={16} className="text-gray-300 group-hover:text-[#0099CC]" />
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const LifecycleStep = ({ data, onChange }) => {
-  return (
-    <div className="relative pl-8 border-l-2 border-gray-200 space-y-8 py-4">
-        {data.stages.map((stage, stageIdx) => (
-        <div key={stage.id} className="relative group">
-            <div className="absolute -left-[41px] top-1 bg-white border-2 border-blue-600 rounded-full w-6 h-6 flex items-center justify-center">
-                <div className="w-2.5 h-2.5 bg-blue-600 rounded-full"></div>
-            </div>
-            <div className="bg-white border border-gray-200 p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex justify-between items-start mb-2">
-                    <h5 className="font-bold text-gray-900">{stage.name}</h5>
-                    <span className="text-xs font-mono text-gray-400 bg-gray-50 px-2 py-1 rounded">Stage {stageIdx + 1}</span>
-                </div>
-                <div className="flex items-center text-sm text-gray-600 bg-slate-50 p-2 rounded-lg inline-block w-full">
-                    <FileText className="w-4 h-4 mr-2 text-gray-400" />
-                    <span className="font-semibold text-gray-700 mr-2">Trigger Document:</span>
-                    {stage.reqDoc}
-                </div>
-            </div>
-        </div>
-        ))}
-    </div>
-  );
-};
-
-const WorkforceStep = ({ data, onChange }) => (
-  <div className="space-y-8">
-    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-      <h4 className="font-bold text-gray-900 mb-6">Delivery Model</h4>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {['contractor', 'volunteer', 'blended'].map(model => (
-          <button
-            key={model}
-            onClick={() => onChange('model', model)}
-            className={`p-4 text-center rounded-xl border-2 transition-all ${
-              data.model === model 
-                ? 'bg-blue-50 border-blue-500 text-blue-700 shadow-sm' 
-                : 'bg-white border-gray-100 text-gray-600 hover:border-gray-200 hover:bg-gray-50'
-            }`}
-          >
-            <div className="font-bold capitalize mb-1">{model}</div>
-            <div className="text-xs opacity-75">
-                {model === 'contractor' && 'Outsourced Labor'}
-                {model === 'volunteer' && 'Community Labor'}
-                {model === 'blended' && 'Hybrid Approach'}
-            </div>
-          </button>
         ))}
       </div>
-    </div>
-
-    <div>
-      <label className="block text-sm font-semibold text-gray-700 mb-2">Quality Control (QC) Frequency</label>
-      <select 
-        className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-3 border transition-all"
-        value={data.qcFrequency}
-        onChange={(e) => onChange('qcFrequency', e.target.value)}
-      >
-        <option value="milestone">At Major Milestones</option>
-        <option value="daily">Daily</option>
-        <option value="weekly">Weekly</option>
-        <option value="final">Final Only (Not Recommended)</option>
-      </select>
     </div>
   </div>
 );
 
-const PerformanceStep = ({ data, onChange }) => (
-  <div className="space-y-8">
-    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-      <h4 className="font-bold text-gray-900 mb-4 flex items-center">
-        <BarChart2 className="w-5 h-5 mr-2 text-blue-600"/> Key Performance Indicators (KPIs)
-      </h4>
-      <p className="text-sm text-gray-500 mb-6">Select the metrics you will track to demonstrate program impact.</p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {Object.keys(data.kpis).map(kpi => (
-           <label key={kpi} className={`flex items-center space-x-3 p-3 rounded-lg border cursor-pointer transition-all ${data.kpis[kpi] ? 'bg-blue-50 border-blue-200' : 'hover:bg-gray-50 border-gray-100'}`}>
-            <input 
-              type="checkbox"
-              className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-              checked={data.kpis[kpi]}
-              onChange={(e) => onChange('kpis', { ...data.kpis, [kpi]: e.target.checked })}
-            />
-            <span className="text-sm font-medium capitalize text-gray-800">{kpi.replace(/([A-Z])/g, ' $1').trim()}</span>
-          </label>
-        ))}
-      </div>
-    </div>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Reporting Schedule</label>
-            <select 
-                className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-3 border transition-all"
-                value={data.reportingSchedule}
-                onChange={(e) => onChange('reportingSchedule', e.target.value)}
-            >
-                <option value="monthly">Monthly</option>
-                <option value="quarterly">Quarterly</option>
-                <option value="annually">Annually</option>
-            </select>
+// --- MAIN LAYOUT COMPONENT ---
+
+const SidebarItem = ({ icon, label, id, active, onClick }) => (
+  <button 
+    onClick={() => onClick(id)}
+    className={`w-full flex flex-col items-center justify-center py-4 px-2 transition-all relative group ${
+      active ? 'bg-[#0099CC] shadow-md' : 'hover:bg-gray-50'
+    }`}
+  >
+    {/* Active Indicator */}
+    {active && (
+      <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-[#C4D600]"></div>
+    )}
+    
+    <div className={`mb-1.5 transition-transform group-hover:scale-110 ${active ? 'text-white' : 'text-[#88888D] group-hover:text-[#0099CC]'}`}>
+      {icon}
+    </div>
+    <span className={`text-[10px] uppercase font-bold tracking-wide ${active ? 'text-white' : 'text-[#88888D] group-hover:text-[#0099CC]'}`}>
+      {label}
+    </span>
+  </button>
+);
+
+const App = () => {
+  const [activeTab, setActiveTab] = useState('home');
+
+  return (
+    <div className="flex flex-col h-screen overflow-hidden bg-gray-50 font-sans text-[#000000]">
+      
+      {/* Global Header - Full Width */}
+      <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 z-50 shrink-0">
+        <div className="flex items-center gap-4">
+          {/* Logo Moved Here */}
+          <div 
+            className="w-8 h-8 bg-[#0099CC] rounded-md flex items-center justify-center text-white font-black text-lg shadow-sm cursor-pointer hover:bg-[#002F6C] transition-colors"
+            onClick={() => setActiveTab('home')}
+          >
+            P
+          </div>
+          
+          <h1 className="text-lg font-bold text-[#002F6C] tracking-tight">PreservationHub</h1>
+          
+          <div className="h-4 w-px bg-gray-300 mx-2"></div>
+          
+          <span className="text-sm text-[#88888D] font-medium capitalize">{activeTab}</span>
         </div>
-        <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Feedback Mechanism</label>
+
+        <div className="flex items-center gap-4">
+          <div className="relative hidden md:block">
+             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#88888D]" size={16} />
              <input 
                 type="text" 
-                className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-3 border transition-all"
-                value={data.feedbackMechanism}
-                onChange={(e) => onChange('feedbackMechanism', e.target.value)}
-                placeholder="e.g. Annual Survey, Post-Project Call"
+                placeholder="Search projects..." 
+                className="pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0099CC]/20 focus:border-[#0099CC] w-64 transition-all text-black placeholder-gray-400"
+             />
+          </div>
+          <button className="p-2 text-[#88888D] hover:text-[#0099CC] hover:bg-gray-50 rounded-full transition-colors relative">
+             <Bell size={20} />
+             <span className="absolute top-2 right-2 w-2 h-2 bg-[#A4343A] rounded-full border border-white"></span>
+          </button>
+        </div>
+      </header>
+
+      {/* Main Workspace Area */}
+      <div className="flex flex-1 overflow-hidden">
+        
+        {/* Left Sidebar - Now below header */}
+        <aside className="w-20 bg-white border-r border-gray-200 flex flex-col items-center py-6 z-40 shrink-0">
+          <nav className="flex-1 w-full space-y-1">
+            <SidebarItem 
+              id="home" 
+              label="Home" 
+              icon={<Home size={22} />} 
+              active={activeTab === 'home'} 
+              onClick={setActiveTab} 
             />
-        </div>
-    </div>
-  </div>
-);
+            <SidebarItem 
+              id="apps" 
+              label="Apps" 
+              icon={<LayoutGrid size={22} />} 
+              active={activeTab === 'apps'} 
+              onClick={setActiveTab} 
+            />
+            <SidebarItem 
+              id="resources" 
+              label="Resources" 
+              icon={<Library size={22} />} 
+              active={activeTab === 'resources'} 
+              onClick={setActiveTab} 
+            />
+            <SidebarItem 
+              id="learn" 
+              label="Learn" 
+              icon={<GraduationCap size={22} />} 
+              active={activeTab === 'learn'} 
+              onClick={setActiveTab} 
+            />
+          </nav>
 
-const ExportStep = ({ data }) => {
-  const handleExport = () => {
-    // Generate a simple HTML document that acts as a Doc
-    const getLabel = (key) => {
-        if (key === 'healthSafety') return 'Health & Safety Urgency (Home Condition)';
-        const group = VULNERABLE_GROUPS.find(g => g.key === key);
-        return group ? group.label : key.replace(/([A-Z])/g, ' $1').trim();
-    };
+          <div className="mt-auto flex flex-col items-center gap-4 mb-2">
+            <button className="text-[#88888D] hover:text-[#0099CC] transition-colors">
+              <Settings size={20} />
+            </button>
+            <div className="w-8 h-8 rounded-full bg-[#E55025] flex items-center justify-center text-xs text-white font-bold cursor-pointer hover:bg-[#002F6C] transition-colors">
+              JD
+            </div>
+            {/* Version Number Added */}
+            <span className="text-[10px] font-mono text-gray-300 mt-2">V1.1</span>
+          </div>
+        </aside>
 
-    const content = `
-      <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-      <head><title>${data.orgName} Repair Manual</title></head>
-      <body>
-        <h1>${data.orgName} - Home Repair Policies & Procedures</h1>
-        <p><strong>Address:</strong> ${data.orgAddress || 'N/A'}</p>
-        <p><strong>Phone:</strong> ${data.orgPhone || 'N/A'} | <strong>Email:</strong> ${data.orgEmail || 'N/A'}</p>
-        <p><strong>Version:</strong> ${data.version}</p>
-        <p><strong>Last Updated:</strong> ${new Date().toLocaleDateString()}</p>
-        
-        <hr />
-        
-        <h2>1. Foundations</h2>
-        <p><strong>Service Area:</strong> ${data.serviceArea}</p>
-        <h3>Key Staff</h3>
-        <ul>
-          ${(data.staff || []).map(s => `<li><strong>${s.name}</strong> - ${s.title}</li>`).join('')}
-        </ul>
-        
-        <h2>2. Compliance</h2>
-        <p><strong>Policy 33 Alignment:</strong> ${data.policy33Aligned ? 'Compliant' : 'Pending'}</p>
-
-        <h2>3. Scope of Services</h2>
-        <p><strong>Financial Cap:</strong> $${data.financialCap}</p>
-        <p><strong>Exclusions:</strong> ${data.exclusions}</p>
-        
-        <h2>4. Roles</h2>
-        <ul>
-          ${data.roles.map(r => `<li><strong>${r.title}:</strong> ${r.responsibilities}</li>`).join('')}
-        </ul>
-        
-        <h2>5. Client Screening & Prioritization</h2>
-        <p>Applications are prioritized based on the following weighted criteria:</p>
-        <ul>
-           ${Object.keys(data.priorityFactors).map(key => `<li><strong>${getLabel(key)}:</strong> Weight ${data.priorityFactors[key]}</li>`).join('')}
-        </ul>
-        
-        <h2>6. Workflow</h2>
-        <ol>
-           ${data.stages.map(s => `<li>${s.name} (Trigger: ${s.reqDoc})</li>`).join('')}
-        </ol>
-
-        <h2>7. Performance & Reporting</h2>
-        <p><strong>Schedule:</strong> ${data.reportingSchedule}</p>
-        <p><strong>Feedback Mechanism:</strong> ${data.feedbackMechanism}</p>
-        <p><strong>Tracked KPIs:</strong></p>
-        <ul>
-            ${Object.keys(data.kpis).filter(k => data.kpis[k]).map(k => `<li>${k.replace(/([A-Z])/g, ' $1')}</li>`).join('')}
-        </ul>
-      </body>
-      </html>
-    `;
-    
-    const blob = new Blob(['\ufeff', content], {
-      type: 'application/msword'
-    });
-    
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `Repair_Manual_${data.orgName.replace(/\s+/g, '_')}_Draft.doc`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  return (
-    <div className="flex flex-col items-center justify-center h-full py-12">
-      <div className="bg-white p-10 rounded-2xl shadow-sm border border-gray-200 text-center max-w-lg w-full">
-        <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-green-50 mb-6">
-            <CheckCircle className="h-10 w-10 text-green-500" />
-        </div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-2">Ready to Publish</h3>
-        <p className="text-gray-500 mb-8 leading-relaxed">
-            Your draft is compliant with the standard structure. Export it to Word to add final branding and signatures.
-        </p>
-        
-        <button 
-            onClick={handleExport}
-            className="w-full flex justify-center items-center px-6 py-4 border border-transparent text-base font-bold rounded-xl shadow-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all transform hover:-translate-y-0.5"
-        >
-            <Download className="mr-2 h-5 w-5" />
-            Export to Word (.doc)
-        </button>
-        
-        <div className="mt-8 pt-6 border-t border-gray-100 text-left">
-            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Final Check</h4>
-            <ul className="space-y-3">
-                <li className="flex items-center text-sm text-gray-600"><CheckCircle className={`w-4 h-4 mr-3 ${data.orgName ? 'text-green-500' : 'text-gray-300'}`}/> Organization Details</li>
-                <li className="flex items-center text-sm text-gray-600"><CheckCircle className={`w-4 h-4 mr-3 ${data.roles.length ? 'text-green-500' : 'text-gray-300'}`}/> Program Roles ({data.roles.length})</li>
-                <li className="flex items-center text-sm text-gray-600"><CheckCircle className={`w-4 h-4 mr-3 ${data.policy33Aligned ? 'text-green-500' : 'text-gray-300'}`}/> Policy 33 Compliance</li>
-            </ul>
-        </div>
+        {/* Scrollable Main Content */}
+        <main className="flex-1 overflow-y-auto scroll-smooth relative bg-gray-50/50">
+          {activeTab === 'home' && <HomeView onNavigate={setActiveTab} />}
+          {activeTab === 'apps' && <AppsView />}
+          {activeTab === 'resources' && <ResourcesView />}
+          {activeTab === 'learn' && <PlaybookContent />}
+        </main>
       </div>
+      
     </div>
   );
 };
 
-// --- Main App Component ---
-
-export default function RepairManualBuilder() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [manualData, setManualData] = useState(INITIAL_DATA);
-  const [saveStatus, setSaveStatus] = useState('saved');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // --- Auth & Data Loading ---
-  
-  useEffect(() => {
-    const initAuth = async () => {
-      try {
-        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-          await signInWithCustomToken(auth, __initial_auth_token);
-        } else {
-          await signInAnonymously(auth);
-        }
-      } catch (err) {
-        console.error("Auth Error", err);
-      }
-    };
-    initAuth();
-
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      if (!currentUser) {
-        setLoading(false);
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    if (!user) return;
-
-    const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'data', 'repairManual');
-    
-    const unsubscribeSnapshot = onSnapshot(docRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setManualData(prev => ({ ...INITIAL_DATA, ...data }));
-      }
-      setLoading(false);
-    }, (error) => {
-      console.error("Data Load Error:", error);
-      setLoading(false);
-    });
-
-    return () => unsubscribeSnapshot();
-  }, [user]);
-
-  // --- Auto-Save Logic ---
-  const saveTimeoutRef = useRef(null);
-
-  const handleDataChange = useCallback((field, value) => {
-    setManualData(prev => {
-        const newData = { ...prev, [field]: value };
-        
-        setSaveStatus('saving');
-        if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
-
-        saveTimeoutRef.current = setTimeout(async () => {
-            if (user) {
-                try {
-                    const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'data', 'repairManual');
-                    await setDoc(docRef, newData, { merge: true });
-                    setSaveStatus('saved');
-                } catch (e) {
-                    console.error("Save failed", e);
-                    setSaveStatus('error');
-                }
-            }
-        }, 1500);
-
-        return newData;
-    });
-  }, [user]);
-
-  // --- Rendering Helpers ---
-
-  const renderStepContent = () => {
-    const commonProps = { data: manualData, onChange: handleDataChange };
-    switch (STEPS[currentStep].id) {
-      case 'foundations': return <FoundationsStep {...commonProps} />;
-      case 'compliance': return <ComplianceStep {...commonProps} />;
-      case 'policyMap': return <PolicyMapStep {...commonProps} />;
-      case 'programModel': return <ProgramModelStep {...commonProps} />;
-      case 'scope': return <ScopeStep {...commonProps} />;
-      case 'screening': return <ClientScreeningStep {...commonProps} />;
-      case 'lifecycle': return <LifecycleStep {...commonProps} />;
-      case 'workforce': return <WorkforceStep {...commonProps} />;
-      case 'performance': return <PerformanceStep {...commonProps} />;
-      case 'export': return <ExportStep data={manualData} />;
-      default: return <div>Unknown Step</div>;
-    }
-  };
-
-  if (loading) return (
-      <div className="flex h-screen items-center justify-center bg-gray-50">
-          <div className="flex flex-col items-center">
-             <Activity className="w-10 h-10 text-blue-600 animate-spin mb-4" />
-             <p className="text-gray-500 font-medium">Loading Builder...</p>
-          </div>
-      </div>
-  );
-
-  return (
-    <div className="flex h-screen bg-slate-50 font-sans text-slate-900">
-      {/* Dark Sidebar Navigation */}
-      <div className={`fixed inset-y-0 left-0 transform ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 transition duration-200 ease-in-out z-30 w-72 bg-slate-900 text-slate-300 flex flex-col shadow-2xl`}>
-        <div className="p-6 border-b border-slate-800">
-          <div className="flex items-center space-x-3 mb-1">
-            <div className="bg-blue-600 p-2 rounded-lg shadow-lg shadow-blue-900/50">
-              <Book className="h-6 w-6 text-white" />
-            </div>
-            <h1 className="text-lg font-bold text-white tracking-tight">RepairManual<span className="text-blue-500">.io</span></h1>
-          </div>
-        </div>
-        
-        <nav className="flex-1 overflow-y-auto p-4 space-y-1">
-          {STEPS.map((step, index) => {
-            const Icon = step.icon;
-            const isActive = currentStep === index;
-            const isCompleted = index < currentStep;
-
-            return (
-              <button
-                key={step.id}
-                onClick={() => { setCurrentStep(index); setMobileMenuOpen(false); }}
-                className={`w-full flex items-center p-3 rounded-lg text-sm font-medium transition-all duration-200 group ${
-                  isActive 
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' 
-                    : 'hover:bg-slate-800 text-slate-400 hover:text-white'
-                }`}
-              >
-                <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-white'}`} />
-                <div className="flex-1 text-left">
-                  {step.title}
-                </div>
-                {isCompleted && <CheckCircle className="h-4 w-4 text-emerald-500" />}
-              </button>
-            );
-          })}
-        </nav>
-        
-        <div className="p-4 border-t border-slate-800 bg-slate-900/50">
-            <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Project</span>
-            </div>
-            <div className="text-sm font-medium text-white truncate mb-4">
-                {manualData.orgName || 'New Project'}
-            </div>
-            <div className="flex justify-between items-center text-xs">
-                <span className="font-mono text-slate-600">v{APP_VERSION}</span>
-                <span className={`flex items-center ${saveStatus === 'saved' ? 'text-emerald-500' : 'text-amber-500'}`}>
-                    {saveStatus === 'saving' ? <ActivityIcon className="w-3 h-3 mr-1 animate-pulse"/> : <Save className="w-3 h-3 mr-1"/>}
-                    {saveStatus === 'saved' ? 'Saved' : 'Saving...'}
-                </span>
-            </div>
-        </div>
-      </div>
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col overflow-hidden h-screen">
-        {/* Mobile Header */}
-        <div className="md:hidden bg-white p-4 shadow-sm flex items-center justify-between border-b border-gray-200 z-20">
-           <div className="flex items-center">
-                <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="mr-3 text-gray-600">
-                    {mobileMenuOpen ? <X /> : <Menu />}
-                </button>
-                <span className="font-bold text-gray-800">RepairManual</span>
-           </div>
-        </div>
-
-        {/* Desktop Header */}
-        <header className="bg-white border-b border-gray-200 px-8 py-5 flex justify-between items-center shrink-0">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">{STEPS[currentStep].title}</h2>
-            <p className="mt-1 text-sm text-gray-500">{STEPS[currentStep].description}</p>
-          </div>
-          <div className="flex space-x-3">
-             <button 
-               onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
-               disabled={currentStep === 0}
-               className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-colors text-sm"
-             >
-               Back
-             </button>
-             <button 
-               onClick={() => setCurrentStep(Math.min(STEPS.length - 1, currentStep + 1))}
-               disabled={currentStep === STEPS.length - 1}
-               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-sm flex items-center disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-all text-sm"
-             >
-               Next Step <ChevronRight className="ml-2 h-4 w-4" />
-             </button>
-          </div>
-        </header>
-
-        <main className="flex-1 overflow-hidden flex">
-           {/* Scrollable Form Content */}
-           <div className="flex-1 overflow-y-auto p-8 lg:p-12">
-             <div className="max-w-3xl mx-auto pb-12">
-                {renderStepContent()}
-             </div>
-           </div>
-
-           {/* Fixed Guide Panel (Right Sidebar) */}
-           <div className="w-80 border-l border-gray-200 bg-white hidden xl:block overflow-y-auto shrink-0 shadow-[rgba(0,0,15,0.05)_0px_0px_10px_0px]">
-              <GuidePanel stepId={STEPS[currentStep].id} />
-           </div>
-        </main>
-      </div>
-
-      {/* Mobile Overlay */}
-      {mobileMenuOpen && (
-        <div 
-            className="fixed inset-0 bg-gray-600 bg-opacity-75 z-20 md:hidden"
-            onClick={() => setMobileMenuOpen(false)}
-        ></div>
-      )}
-    </div>
-  );
-}
+export default App;
