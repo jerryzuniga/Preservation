@@ -325,16 +325,16 @@ const PlaybookContent = () => {
 
 // --- PLACEHOLDER VIEWS ---
 
-// Updated SharePoint-style "Quick Link" Card
-const QuickLinkCard = ({ title, icon, color = "bg-[#0099CC]", onClick }) => (
+// Updated SharePoint-style "Quick Link" Card to support Apps
+const QuickLinkCard = ({ title, imgSrc, color, onClick }) => (
   <button 
     onClick={onClick}
-    className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-[#0099CC] transition-all flex flex-col items-center justify-center gap-3 h-32 group"
+    className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-[#0099CC] transition-all flex flex-col items-center justify-center gap-3 h-36 group"
   >
-    <div className={`p-3 rounded-full ${color} text-white group-hover:scale-110 transition-transform`}>
-      {icon}
+    <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white ${color} shadow-sm group-hover:scale-110 transition-transform overflow-hidden`}>
+       <img src={imgSrc} alt={title} className="w-full h-full object-cover" />
     </div>
-    <span className="text-xs font-bold text-[#002F6C] text-center leading-tight">{title}</span>
+    <span className="text-xs font-bold text-[#002F6C] text-center leading-tight line-clamp-2">{title}</span>
   </button>
 );
 
@@ -395,15 +395,45 @@ const HomeView = ({ onNavigate }) => (
     {/* MAIN CONTENT CONTAINER */}
     <div className="max-w-7xl mx-auto px-6 -mt-8 relative z-20 space-y-8">
       
-      {/* QUICK LAUNCH - SharePoint Style Tiles */}
+      {/* QUICK LAUNCH - 6 Core Apps */}
       <section>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-           <QuickLinkCard title="New Repair Project" icon={<Hammer size={24} />} onClick={() => {}} />
-           <QuickLinkCard title="Intake Portal" icon={<Users size={24} />} color="bg-[#C4D600]" onClick={() => {}} />
-           <QuickLinkCard title="Funding Status" icon={<DollarSign size={24} />} onClick={() => {}} />
-           <QuickLinkCard title="Safety Checklist" icon={<Shield size={24} />} color="bg-[#E55025]" onClick={() => {}} />
-           <QuickLinkCard title="Policy Library" icon={<Library size={24} />} onClick={() => {}} />
-           <QuickLinkCard title="My Tasks" icon={<CheckCircle size={24} />} color="bg-[#3AA047]" onClick={() => {}} />
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+           <QuickLinkCard 
+             title="Policy Builder" 
+             imgSrc="https://github.com/jerryzuniga/Preservation/blob/ce11cf49a7ae9130b7763e2de2d66cdcdf9d82ad/public/policy.png?raw=true"
+             color="bg-[#8179E2]" 
+             onClick={() => window.open('https://policy-builder.vercel.app/', '_blank')} 
+           />
+           <QuickLinkCard 
+             title="Catalog Builder" 
+             imgSrc="https://github.com/jerryzuniga/Preservation/blob/ce11cf49a7ae9130b7763e2de2d66cdcdf9d82ad/public/catalog.png?raw=true" 
+             color="bg-[#F88259]" 
+             onClick={() => window.open('https://repairs-catalog.vercel.app/', '_blank')} 
+           />
+           <QuickLinkCard 
+             title="Readiness Assessment" 
+             imgSrc="https://github.com/jerryzuniga/Preservation/blob/6955e8ab2a7da593bfb3d30173f758fd10a6f5b8/public/readiness.png?raw=true" 
+             color="bg-[#3EA9D5]" 
+             onClick={() => window.open('https://readiness-app.vercel.app/', '_blank')} 
+           />
+           <QuickLinkCard 
+             title="Foundations Assessment" 
+             imgSrc="https://github.com/jerryzuniga/Preservation/blob/6955e8ab2a7da593bfb3d30173f758fd10a6f5b8/public/foundations.png?raw=true" 
+             color="bg-[#899AAC]" 
+             onClick={() => onNavigate('apps')} 
+           />
+           <QuickLinkCard 
+             title="Operations Assessment" 
+             imgSrc="https://github.com/jerryzuniga/Preservation/blob/b67cf4298d76d0d6ace08f846fb54cae6e2114fe/public/operations.png?raw=true" 
+             color="bg-[#89D276]" 
+             onClick={() => onNavigate('apps')} 
+           />
+           <QuickLinkCard 
+             title="Support Systems Assessment" 
+             imgSrc="https://github.com/jerryzuniga/Preservation/blob/b67cf4298d76d0d6ace08f846fb54cae6e2114fe/public/supportive.png?raw=true" 
+             color="bg-[#21AC9A]" 
+             onClick={() => onNavigate('apps')} 
+           />
         </div>
       </section>
 
@@ -534,15 +564,15 @@ const HomeView = ({ onNavigate }) => (
 );
 
 // --- APP CARD COMPONENT ---
-const AppCard = ({ title, category, version, icon, color, description, isNew = false }) => (
+const AppCard = ({ title, category, version, imgSrc, color, description, isNew = false, url }) => (
   <div className="bg-white rounded-xl border border-gray-200 hover:border-[#0099CC] hover:shadow-lg transition-all group overflow-hidden flex flex-col h-full">
     {/* Colored Header Strip */}
     <div className={`h-2 w-full ${color}`}></div>
     
     <div className="p-6 flex flex-col h-full">
       <div className="flex justify-between items-start mb-4">
-        <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white ${color} shadow-sm group-hover:scale-110 transition-transform`}>
-           {icon}
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white ${color} shadow-sm group-hover:scale-110 transition-transform overflow-hidden`}>
+           <img src={imgSrc} alt={title} className="w-full h-full object-cover" />
         </div>
         {isNew && (
            <span className="px-2 py-1 bg-[#C4D600] text-[#002F6C] text-[10px] font-bold uppercase rounded-full">New</span>
@@ -560,7 +590,10 @@ const AppCard = ({ title, category, version, icon, color, description, isNew = f
          </p>
       </div>
 
-      <button className={`w-full py-2.5 rounded-lg font-bold text-sm text-white ${color} hover:opacity-90 transition-opacity flex items-center justify-center gap-2 mt-auto`}>
+      <button 
+        onClick={() => url ? window.open(url, '_blank') : null}
+        className={`w-full py-2.5 rounded-lg font-bold text-sm text-white ${color} hover:opacity-90 transition-opacity flex items-center justify-center gap-2 mt-auto`}
+      >
          Launch App <Play size={14} fill="currentColor" />
       </button>
     </div>
@@ -582,52 +615,55 @@ const AppsView = () => (
     
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <AppCard 
-         title="P&P Builder" 
+         title="Policy Builder" 
          category="Governance" 
          version="v1.0" 
-         icon={<FileText size={24} />} 
-         color="bg-[#0099CC]"
+         imgSrc="https://github.com/jerryzuniga/Preservation/blob/ce11cf49a7ae9130b7763e2de2d66cdcdf9d82ad/public/policy.png?raw=true" 
+         color="bg-[#8179E2]"
          description="Easily build and generate customized Policies and Procedures manuals to structure your program."
+         url="https://policy-builder.vercel.app/"
       />
       <AppCard 
-         title="Repairs Catalog Builder" 
+         title="Catalog Builder" 
          category="Operations" 
          version="v1.0" 
-         icon={<BookOpen size={24} />} 
-         color="bg-[#002F6C]"
+         imgSrc="https://github.com/jerryzuniga/Preservation/blob/ce11cf49a7ae9130b7763e2de2d66cdcdf9d82ad/public/catalog.png?raw=true" 
+         color="bg-[#F88259]"
          description="Create a comprehensive catalog defining your program's specific eligible and non-eligible repair interventions."
+         url="https://repairs-catalog.vercel.app/"
       />
       <AppCard 
          title="Readiness Assessment" 
          category="Strategy" 
          version="New" 
-         icon={<Zap size={24} />} 
-         color="bg-[#E55025]"
+         imgSrc="https://github.com/jerryzuniga/Preservation/blob/6955e8ab2a7da593bfb3d30173f758fd10a6f5b8/public/readiness.png?raw=true" 
+         color="bg-[#3EA9D5]"
          description="A pre-launch evaluation designed to determine a nonprofit's readiness to start a new home repair program."
          isNew={true}
+         url="https://readiness-app.vercel.app/"
       />
       <AppCard 
          title="Foundations Assessment" 
          category="Development" 
          version="v1.0" 
-         icon={<Hammer size={24} />} 
-         color="bg-[#C4D600]"
+         imgSrc="https://github.com/jerryzuniga/Preservation/blob/6955e8ab2a7da593bfb3d30173f758fd10a6f5b8/public/foundations.png?raw=true" 
+         color="bg-[#899AAC]"
          description="Assess early program development efforts, focusing on essential programmatic foundations and pre-operational requirements."
       />
       <AppCard 
          title="Operations Assessment" 
          category="Efficiency" 
          version="v2.1" 
-         icon={<Activity size={24} />} 
-         color="bg-[#3AA047]"
+         imgSrc="https://github.com/jerryzuniga/Preservation/blob/b67cf4298d76d0d6ace08f846fb54cae6e2114fe/public/operations.png?raw=true" 
+         color="bg-[#89D276]"
          description="Measure the efficiency of internal processes and systems during active program delivery to optimize operations."
       />
       <AppCard 
          title="Support Systems Assessment" 
          category="Sustainability" 
          version="v2.0" 
-         icon={<BarChart3 size={24} />} 
-         color="bg-[#A4343A]"
+         imgSrc="https://github.com/jerryzuniga/Preservation/blob/b67cf4298d76d0d6ace08f846fb54cae6e2114fe/public/supportive.png?raw=true" 
+         color="bg-[#21AC9A]"
          description="An advanced tool for mature programs to evaluate systems crucial for long-term sustainability and outcomes."
       />
     </div>
