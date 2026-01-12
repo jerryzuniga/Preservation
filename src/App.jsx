@@ -371,7 +371,21 @@ const DocumentRow = ({ name, modified, author, icon }) => (
   </div>
 );
 
-const HomeView = ({ onNavigate }) => (
+const HomeView = ({ onNavigate }) => {
+  const [greeting, setGreeting] = useState('Good Morning');
+
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) {
+      setGreeting('Good Morning');
+    } else if (hour < 18) {
+      setGreeting('Good Afternoon');
+    } else {
+      setGreeting('Good Evening');
+    }
+  }, []);
+
+  return (
   <div className="bg-gray-50/50 min-h-full pb-12">
     
     {/* HERO SECTION - SharePoint Style */}
@@ -385,7 +399,7 @@ const HomeView = ({ onNavigate }) => (
           <div className="flex items-center gap-2 mb-2">
             <span className="px-2 py-0.5 rounded bg-[#C4D600] text-[#002F6C] text-[10px] font-bold uppercase tracking-wide">Internal Portal</span>
           </div>
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">Good Morning, Affiliate Leader</h1>
+          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">{greeting}, Affiliate Leader</h1>
           <p className="text-blue-100 max-w-2xl text-base md:text-lg font-light">
             Welcome to the PreservationHub. Access your tools, track network news, and align with the national housing preservation strategy.
           </p>
@@ -561,7 +575,8 @@ const HomeView = ({ onNavigate }) => (
       </div>
     </div>
   </div>
-);
+  );
+};
 
 // --- APP CARD COMPONENT ---
 const AppCard = ({ title, category, version, imgSrc, color, description, isNew = false, url }) => (
@@ -592,9 +607,14 @@ const AppCard = ({ title, category, version, imgSrc, color, description, isNew =
 
       <button 
         onClick={() => url ? window.open(url, '_blank') : null}
-        className={`w-full py-2.5 rounded-lg font-bold text-sm text-white ${color} hover:opacity-90 transition-opacity flex items-center justify-center gap-2 mt-auto`}
+        disabled={!url}
+        className={`w-full py-2.5 rounded-lg font-bold text-sm text-white ${url ? color + ' hover:opacity-90' : 'bg-gray-300 cursor-not-allowed'} transition-all flex items-center justify-center gap-2 mt-auto`}
       >
-         Launch App <Play size={14} fill="currentColor" />
+         {url ? (
+            <>Launch App <Play size={14} fill="currentColor" /></>
+         ) : (
+            <>Coming Soon <Clock size={14} /></>
+         )}
       </button>
     </div>
   </div>
@@ -756,7 +776,10 @@ const App = () => {
             onClick={() => setActiveTab('home')}
           />
           
-          <h1 className="text-lg font-bold text-[#002F6C] tracking-tight">PreservationHub</h1>
+          <h1 className="text-lg font-bold tracking-tight">
+            <span className="text-[#002F6C]">Preservation</span>
+            <span className="text-[#0099CC]">Hub</span>
+          </h1>
           
           <div className="h-4 w-px bg-gray-300 mx-2"></div>
           
