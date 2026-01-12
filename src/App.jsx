@@ -733,6 +733,15 @@ const SidebarItem = ({ icon, label, id, active, onClick }) => (
 const App = () => {
   const [activeTab, setActiveTab] = useState('home');
 
+  useEffect(() => {
+    // Update favicon dynamically
+    const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.type = 'image/png';
+    link.rel = 'shortcut icon';
+    link.href = 'https://github.com/jerryzuniga/Preservation/blob/5350fbca90a8194526ad30fde9d3e551833ebae1/public/hub.png?raw=true';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  }, []);
+
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-gray-50 font-sans text-[#000000]">
       
@@ -740,12 +749,12 @@ const App = () => {
       <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 z-50 shrink-0">
         <div className="flex items-center gap-4">
           {/* Logo Moved Here */}
-          <div 
-            className="w-8 h-8 bg-[#0099CC] rounded-md flex items-center justify-center text-white font-black text-lg shadow-sm cursor-pointer hover:bg-[#002F6C] transition-colors"
+          <img 
+            src="https://github.com/jerryzuniga/Preservation/blob/5350fbca90a8194526ad30fde9d3e551833ebae1/public/hub.png?raw=true"
+            alt="PreservationHub Logo"
+            className="w-8 h-8 rounded-md shadow-sm cursor-pointer hover:opacity-80 transition-opacity"
             onClick={() => setActiveTab('home')}
-          >
-            P
-          </div>
+          />
           
           <h1 className="text-lg font-bold text-[#002F6C] tracking-tight">PreservationHub</h1>
           
