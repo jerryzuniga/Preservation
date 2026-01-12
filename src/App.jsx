@@ -738,7 +738,7 @@ const App = () => {
     const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
     link.type = 'image/png';
     link.rel = 'shortcut icon';
-    link.href = 'https://github.com/jerryzuniga/Preservation/blob/8bcd28025e3b935656789563c3c6e3b6efed21a7/public/hub.png?raw=true';
+    link.href = 'https://github.com/jerryzuniga/Preservation/blob/90c1156da350793419c1e61644c4165d8b30b30d/public/hub.png?raw=true';
     document.getElementsByTagName('head')[0].appendChild(link);
   }, []);
 
@@ -750,7 +750,7 @@ const App = () => {
         <div className="flex items-center gap-4">
           {/* Logo Moved Here */}
           <img 
-            src="https://github.com/jerryzuniga/Preservation/blob/8bcd28025e3b935656789563c3c6e3b6efed21a7/public/hub.png?raw=true"
+            src="https://github.com/jerryzuniga/Preservation/blob/90c1156da350793419c1e61644c4165d8b30b30d/public/hub.png?raw=true"
             alt="PreservationHub Logo"
             className="w-8 h-8 rounded-md shadow-sm cursor-pointer hover:opacity-80 transition-opacity"
             onClick={() => setActiveTab('home')}
