@@ -81,35 +81,42 @@ const FrameworkRingDiagram = () => (
 
 // Generational Wealth Chart
 const WealthChart = () => (
-  <svg viewBox="0 0 800 400" className="w-full h-full bg-white/5 rounded-xl p-4">
+  <svg viewBox="0 0 800 400" className="w-full h-full bg-black/20 rounded-xl p-4 border border-white/10 shadow-inner">
     {/* Grid Lines */}
-    <line x1="50" y1="350" x2="750" y2="350" stroke="white" strokeWidth="2" opacity="0.5" /> 
-    <line x1="50" y1="50" x2="50" y2="350" stroke="white" strokeWidth="2" opacity="0.5" />
+    <line x1="50" y1="350" x2="750" y2="350" stroke="white" strokeWidth="2" opacity="0.3" /> 
+    <line x1="50" y1="50" x2="50" y2="350" stroke="white" strokeWidth="2" opacity="0.3" />
     
     {/* Areas */}
-    <path d="M 50 350 L 750 350 L 750 50 L 50 250 Z" fill="url(#gradientEquity)" opacity="0.3" />
+    <path d="M 50 350 L 750 350 L 750 50 L 50 250 Z" fill="url(#gradientEquity)" opacity="0.2" />
 
     {/* Lines */}
-    <path d="M 50 100 C 200 120, 400 180, 600 350" fill="none" stroke="#A4343A" strokeWidth="4" strokeDasharray="8 4" />
-    <text x="60" y="90" fill="#A4343A" className="text-sm font-bold">DEBT (Liability)</text>
+    {/* Debt Line - Switched to Orange #E55025 for better visibility on dark background */}
+    <path d="M 50 100 C 200 120, 400 180, 600 350" fill="none" stroke="#E55025" strokeWidth="4" strokeDasharray="8 4" />
+    <text x="60" y="90" fill="#E55025" className="text-sm font-bold tracking-wide" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>DEBT (Liability)</text>
 
+    {/* Wealth Line - Bright Green #C4D600 */}
     <path d="M 50 350 C 200 340, 400 200, 750 50" fill="none" stroke="#C4D600" strokeWidth="5" />
-    <text x="700" y="40" fill="#C4D600" className="text-sm font-bold">WEALTH (Asset)</text>
+    <text x="700" y="40" fill="#C4D600" className="text-sm font-bold tracking-wide" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>WEALTH (Asset)</text>
 
     {/* Markers */}
-    <circle cx="50" cy="350" r="6" fill="white" />
-    <text x="50" y="380" fill="white" textAnchor="middle" fontSize="12">Day 1</text>
-    <circle cx="250" cy="300" r="6" fill="white" />
-    <text x="250" y="380" fill="white" textAnchor="middle" fontSize="12">Yrs 5-15</text>
-    <circle cx="500" cy="150" r="6" fill="white" />
-    <text x="500" y="380" fill="white" textAnchor="middle" fontSize="12">Yrs 20-25</text>
-    <circle cx="750" cy="50" r="8" fill="#C4D600" stroke="white" strokeWidth="2" />
-    <text x="750" y="380" fill="white" textAnchor="middle" fontSize="12">Transfer</text>
+    <g className="font-medium text-xs" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
+        <circle cx="50" cy="350" r="6" fill="white" />
+        <text x="50" y="380" fill="white" textAnchor="middle">Day 1</text>
+        
+        <circle cx="250" cy="300" r="6" fill="white" />
+        <text x="250" y="380" fill="white" textAnchor="middle">Yrs 5-15</text>
+        
+        <circle cx="500" cy="150" r="6" fill="white" />
+        <text x="500" y="380" fill="white" textAnchor="middle">Yrs 20-25</text>
+        
+        <circle cx="750" cy="50" r="8" fill="#C4D600" stroke="white" strokeWidth="2" />
+        <text x="750" y="380" fill="white" textAnchor="middle">Transfer</text>
+    </g>
 
     <defs>
       <linearGradient id="gradientEquity" x1="0" y1="1" x2="1" y2="0">
         <stop offset="0%" stopColor="#C4D600" stopOpacity="0" />
-        <stop offset="100%" stopColor="#C4D600" stopOpacity="0.5" />
+        <stop offset="100%" stopColor="#C4D600" stopOpacity="0.4" />
       </linearGradient>
     </defs>
   </svg>
@@ -325,16 +332,38 @@ const PlaybookContent = () => {
 
 // --- PLACEHOLDER VIEWS ---
 
-// Updated SharePoint-style "Quick Link" Card to support Apps
-const QuickLinkCard = ({ title, imgSrc, color, onClick }) => (
+// Updated SharePoint-style "Quick Link" Card to support Apps with Status Badges
+const QuickLinkCard = ({ title, imgSrc, color, onClick, isNew, isComingSoon }) => (
   <button 
-    onClick={onClick}
-    className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-[#0099CC] transition-all flex flex-col items-center justify-center gap-3 h-36 group"
+    onClick={isComingSoon ? null : onClick}
+    className={`bg-white p-4 rounded-lg shadow-sm border border-gray-100 transition-all flex flex-col items-center justify-center gap-3 h-36 group relative ${
+      isComingSoon 
+        ? 'cursor-not-allowed bg-gray-50' 
+        : 'hover:shadow-md hover:border-[#0099CC] cursor-pointer'
+    }`}
   >
-    <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white ${color} shadow-sm group-hover:scale-110 transition-transform overflow-hidden`}>
-       <img src={imgSrc} alt={title} className="w-full h-full object-cover" />
+    {/* Status Badges */}
+    {isNew && (
+      <span className="absolute top-2 right-2 px-2 py-0.5 bg-[#C4D600] text-[#002F6C] text-[9px] font-bold uppercase rounded-full shadow-sm z-10 animate-pulse">
+        New
+      </span>
+    )}
+    {isComingSoon && (
+      <span className="absolute top-2 right-2 px-2 py-0.5 bg-gray-200 text-gray-500 text-[9px] font-bold uppercase rounded-full z-10">
+        Soon
+      </span>
+    )}
+
+    <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white ${color} shadow-sm ${!isComingSoon && 'group-hover:scale-110'} transition-transform overflow-hidden`}>
+       <img 
+         src={imgSrc} 
+         alt={title} 
+         className="w-full h-full object-cover" 
+       />
     </div>
-    <span className="text-xs font-bold text-[#002F6C] text-center leading-tight line-clamp-2">{title}</span>
+    <span className={`text-xs font-bold text-center leading-tight line-clamp-2 ${isComingSoon ? 'text-gray-500' : 'text-[#002F6C]'}`}>
+      {title}
+    </span>
   </button>
 );
 
@@ -395,19 +424,35 @@ const HomeView = ({ onNavigate }) => {
        <div className="absolute -right-20 -top-20 w-96 h-96 bg-[#C4D600] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
        <div className="absolute left-10 bottom-0 w-64 h-64 bg-[#0099CC] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
        
-       <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex flex-col justify-center">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="px-2 py-0.5 rounded bg-[#C4D600] text-[#002F6C] text-[10px] font-bold uppercase tracking-wide">Internal Portal</span>
+       <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+          <div className="flex flex-col justify-center max-w-2xl">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="px-2 py-0.5 rounded bg-[#C4D600] text-[#002F6C] text-[10px] font-bold uppercase tracking-wide">Internal Portal</span>
+            </div>
+            <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">{greeting}, Affiliate Leader</h1>
+            <p className="text-blue-100 max-w-xl text-base md:text-lg font-light">
+              Welcome to the PreservationHub. Access your tools, track network news, and align with the national housing preservation strategy.
+            </p>
           </div>
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">{greeting}, Affiliate Leader</h1>
-          <p className="text-blue-100 max-w-2xl text-base md:text-lg font-light">
-            Welcome to the PreservationHub. Access your tools, track network news, and align with the national housing preservation strategy.
-          </p>
+
+          {/* Large Hero Logo */}
+          <div className="hidden md:flex items-center justify-center pr-8">
+             <div className="relative group">
+                <div className="absolute inset-0 bg-[#C4D600] rounded-full blur-2xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                <div className="bg-white p-6 rounded-full shadow-2xl relative z-10 transform group-hover:scale-105 transition-transform duration-500">
+                  <img 
+                    src="https://github.com/jerryzuniga/Preservation/blob/90c1156da350793419c1e61644c4165d8b30b30d/public/hub.png?raw=true" 
+                    alt="Preservation Hub Large Logo" 
+                    className="w-32 h-32 object-contain"
+                  />
+                </div>
+             </div>
+          </div>
        </div>
     </div>
 
     {/* MAIN CONTENT CONTAINER */}
-    <div className="max-w-7xl mx-auto px-6 -mt-8 relative z-20 space-y-8">
+    <div className="max-w-7xl mx-auto px-6 -mt-8 relative z-20 space-y-12">
       
       {/* QUICK LAUNCH - 6 Core Apps */}
       <section>
@@ -416,12 +461,14 @@ const HomeView = ({ onNavigate }) => {
              title="Policy Builder" 
              imgSrc="https://github.com/jerryzuniga/Preservation/blob/ce11cf49a7ae9130b7763e2de2d66cdcdf9d82ad/public/policy.png?raw=true"
              color="bg-[#8179E2]" 
+             isNew={true}
              onClick={() => window.open('https://policy-builder.vercel.app/', '_blank')} 
            />
            <QuickLinkCard 
              title="Catalog Builder" 
              imgSrc="https://github.com/jerryzuniga/Preservation/blob/ce11cf49a7ae9130b7763e2de2d66cdcdf9d82ad/public/catalog.png?raw=true" 
              color="bg-[#F88259]" 
+             isNew={true}
              onClick={() => window.open('https://repairs-catalog.vercel.app/', '_blank')} 
            />
            <QuickLinkCard 
@@ -434,147 +481,193 @@ const HomeView = ({ onNavigate }) => {
              title="Foundations Assessment" 
              imgSrc="https://github.com/jerryzuniga/Preservation/blob/6955e8ab2a7da593bfb3d30173f758fd10a6f5b8/public/foundations.png?raw=true" 
              color="bg-[#899AAC]" 
-             onClick={() => onNavigate('apps')} 
+             isComingSoon={true}
+             onClick={() => {}} 
            />
            <QuickLinkCard 
              title="Operations Assessment" 
              imgSrc="https://github.com/jerryzuniga/Preservation/blob/b67cf4298d76d0d6ace08f846fb54cae6e2114fe/public/operations.png?raw=true" 
              color="bg-[#89D276]" 
-             onClick={() => onNavigate('apps')} 
+             isComingSoon={true}
+             onClick={() => {}} 
            />
            <QuickLinkCard 
              title="Support Systems Assessment" 
              imgSrc="https://github.com/jerryzuniga/Preservation/blob/b67cf4298d76d0d6ace08f846fb54cae6e2114fe/public/supportive.png?raw=true" 
              color="bg-[#21AC9A]" 
-             onClick={() => onNavigate('apps')} 
+             isComingSoon={true}
+             onClick={() => {}} 
            />
         </div>
       </section>
 
-      {/* TWO COLUMN LAYOUT */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-         
-         {/* LEFT COLUMN (News & Docs) */}
-         <div className="lg:col-span-2 space-y-8">
-            
-            {/* NEWS FEED */}
-            <section>
-               <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-[#002F6C] font-bold text-lg flex items-center gap-2">
-                     <Star size={18} className="text-[#C4D600]" fill="#C4D600" /> Network News
-                  </h3>
-                  <a href="#" className="text-xs text-[#0099CC] font-bold hover:underline">See All</a>
-               </div>
-               
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-auto md:h-64">
-                  {/* Hero News Item */}
-                  <NewsCard 
-                     main={true}
-                     title="New 'Aging in Place' Grant Funding Available for FY26"
-                     category="Funding Alert"
-                     date="Today, 9:00 AM"
-                     imageColor="bg-[#002F6C]"
-                  />
-                  {/* Side News Items */}
-                  <div className="flex flex-col gap-4 h-full">
-                     <NewsCard 
-                        title="Affiliate Spotlight: How Austin Habitat Reduced Repair Costs by 15%"
-                        category="Best Practices"
-                        date="Yesterday"
-                        imageColor="bg-[#0099CC]"
-                     />
-                     <NewsCard 
-                        title="Updated Safety Protocols for Lead Hazard Control Effective Immediately"
-                        category="Compliance"
-                        date="Oct 24"
-                        imageColor="bg-[#E55025]"
-                     />
-                  </div>
-               </div>
-            </section>
-            
-            {/* RECENT DOCUMENTS */}
-             <section className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-               <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-[#002F6C] font-bold text-lg">Recent Documents</h3>
-                  <div className="flex gap-2">
-                     <button className="p-1 hover:bg-gray-100 rounded text-[#88888D]"><Settings size={16}/></button>
-                  </div>
-               </div>
-               <div className="flex flex-col">
-                  <DocumentRow name="Q3_Impact_Report_Draft_v2.pdf" modified="2h ago" author="You" icon={<FileText size={18} />} />
-                  <DocumentRow name="Project_104_Budget_Estimation.xlsx" modified="5h ago" author="Mike R." icon={<DollarSign size={18} />} />
-                  <DocumentRow name="Homeowner_Agreement_Template_2025.docx" modified="1d ago" author="Sarah M." icon={<FileText size={18} />} />
-                  <DocumentRow name="Site_Safety_Inspection_Log.pdf" modified="2d ago" author="John D." icon={<Shield size={18} />} />
-               </div>
-               <button className="w-full mt-4 py-2 text-xs text-[#0099CC] font-bold hover:bg-blue-50 rounded transition-colors">
-                  View All Documents
-               </button>
-            </section>
-         </div>
+      {/* NEW: GENERATIONAL WEALTH SECTION (Replaces Framework) */}
+        <section className="bg-gradient-to-r from-[#002F6C] to-[#004e7c] rounded-2xl p-8 shadow-lg relative overflow-hidden border border-[#0099CC]/30">
+            <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl"></div>
+            <div className="relative z-10 flex flex-col md:flex-row items-center gap-12">
+                <div className="md:w-1/2 space-y-6">
+                    <h2 className="text-3xl font-bold text-white flex items-center gap-3">
+                        <TrendingUp className="text-[#C4D600]" size={32} />
+                        Homes as Generational Wealth
+                    </h2>
+                    <p className="text-blue-100 leading-relaxed">
+                        A home is more than shelter; it is a financial asset. But affordable homeownership does not equal instant wealth. It requires time, consistency, and <strong>preservation</strong> to move from debt to equity.
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                        <div className="bg-white/10 px-4 py-2 rounded-lg backdrop-blur-sm border border-white/20">
+                            <span className="block text-[10px] text-blue-200 uppercase tracking-wider font-bold">Stage 1</span>
+                            <span className="font-bold text-white text-sm">Greatest Debt</span>
+                        </div>
+                        <div className="bg-white/10 px-4 py-2 rounded-lg backdrop-blur-sm border border-white/20">
+                            <span className="block text-[10px] text-blue-200 uppercase tracking-wider font-bold">Stage 2</span>
+                            <span className="font-bold text-white text-sm">Equity Build</span>
+                        </div>
+                        <div className="bg-[#C4D600] px-4 py-2 rounded-lg shadow-lg text-[#002F6C]">
+                            <span className="block text-[10px] uppercase tracking-wider font-bold opacity-80">Goal</span>
+                            <span className="font-bold text-sm">Realized Wealth</span>
+                        </div>
+                    </div>
+                    <button onClick={() => onNavigate('learn')} className="text-white/80 font-bold text-sm hover:text-white hover:underline flex items-center gap-2 mt-4">
+                        Read the full strategy <ArrowRight size={16}/>
+                    </button>
+                </div>
+                <div className="md:w-1/2 w-full h-64 bg-white/5 rounded-xl p-4 border border-white/10">
+                    <WealthChart />
+                    <p className="text-center text-xs text-blue-200 mt-2 italic">
+                        Visualizing the journey from Liability to Asset Transfer
+                    </p>
+                </div>
+            </div>
+        </section>
 
-         {/* RIGHT COLUMN (Events & Contacts) */}
-         <div className="space-y-8">
-            
-            {/* UPCOMING EVENTS */}
-            <section className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-               <h3 className="text-[#002F6C] font-bold text-lg mb-4">Upcoming Events</h3>
-               <div className="space-y-4">
-                  {[
-                     { day: "28", month: "OCT", title: "Regional Repair Summit", time: "10:00 AM - 2:00 PM" },
-                     { day: "02", month: "NOV", title: "Grant Writing Workshop", time: "1:00 PM - 3:00 PM" },
-                     { day: "15", month: "NOV", title: "Quarterly Safety Review", time: "9:00 AM - 10:30 AM" },
-                  ].map((evt, i) => (
-                     <div key={i} className="flex gap-4 items-start group cursor-pointer">
-                        <div className="flex flex-col items-center bg-blue-50 rounded-lg p-2 w-14 shrink-0 group-hover:bg-[#0099CC] group-hover:text-white transition-colors">
-                           <span className="text-[10px] font-bold uppercase">{evt.month}</span>
-                           <span className="text-xl font-black text-[#002F6C] group-hover:text-white">{evt.day}</span>
+        {/* NEW: IMPACT METRICS */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-[#002F6C] text-white p-8 rounded-2xl text-center shadow-lg relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+                <div className="relative z-10">
+                    <div className="text-4xl font-black mb-2 text-[#C4D600]">$126.9B</div>
+                    <p className="text-blue-100 text-sm font-medium uppercase tracking-wide">Repair Need</p>
+                    <p className="text-blue-200/60 text-xs mt-2">Estimated cost to address disrepair in existing U.S. housing.</p>
+                </div>
+            </div>
+            <div className="bg-[#002F6C] text-white p-8 rounded-2xl text-center shadow-lg relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+                <div className="relative z-10">
+                    <div className="text-4xl font-black mb-2 text-[#C4D600]">35 Million</div>
+                    <p className="text-blue-100 text-sm font-medium uppercase tracking-wide">Homes at Risk</p>
+                    <p className="text-blue-200/60 text-xs mt-2">U.S. homes placing occupants at potential health & safety risk.</p>
+                </div>
+            </div>
+            <div className="bg-[#002F6C] text-white p-8 rounded-2xl text-center shadow-lg relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+                <div className="relative z-10">
+                    <div className="text-4xl font-black mb-2 text-[#C4D600]">833%</div>
+                    <p className="text-blue-100 text-sm font-medium uppercase tracking-wide">Growth in 10 Yrs</p>
+                    <p className="text-blue-200/60 text-xs mt-2">Increase in Habitat Repairs production over the last decade.</p>
+                </div>
+            </div>
+        </section>
+
+        {/* NEW: NEWS & UPDATES (Expanded) */}
+        <section>
+            <div className="flex items-center justify-between mb-6">
+                <h3 className="text-[#002F6C] font-bold text-2xl flex items-center gap-3">
+                    <Star className="text-[#C4D600]" fill="currentColor" /> Network News
+                </h3>
+                <button className="text-sm font-semibold text-[#88888D] hover:text-[#0099CC]">View Archive</button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                 {/* News Card 1 */}
+                 <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all cursor-pointer group">
+                    <div className="h-40 bg-[#002F6C] flex items-center justify-center">
+                        <MessageSquare className="text-white/20" size={48} />
+                    </div>
+                    <div className="p-6">
+                        <div className="flex items-center justify-between mb-3">
+                            <span className="px-2 py-1 bg-blue-50 text-[#0099CC] text-[10px] font-bold uppercase rounded-full">Funding Alert</span>
+                            <span className="text-xs text-gray-400">Today</span>
+                        </div>
+                        <h4 className="font-bold text-[#002F6C] text-lg mb-2 group-hover:text-[#0099CC] transition-colors">
+                            New 'Aging in Place' Grant Funding Available for FY26
+                        </h4>
+                        <p className="text-sm text-gray-500 line-clamp-3">
+                            Applications are now open for the expanded Aging in Place grant cycle. Learn about new eligibility requirements and how to apply.
+                        </p>
+                    </div>
+                 </div>
+
+                 {/* News Card 2 */}
+                 <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all cursor-pointer group">
+                    <div className="h-40 bg-[#0099CC] flex items-center justify-center">
+                        <TrendingUp className="text-white/20" size={48} />
+                    </div>
+                    <div className="p-6">
+                        <div className="flex items-center justify-between mb-3">
+                            <span className="px-2 py-1 bg-blue-50 text-[#0099CC] text-[10px] font-bold uppercase rounded-full">Best Practices</span>
+                            <span className="text-xs text-gray-400">Yesterday</span>
+                        </div>
+                        <h4 className="font-bold text-[#002F6C] text-lg mb-2 group-hover:text-[#0099CC] transition-colors">
+                            Affiliate Spotlight: Austin Habitat Reduced Repair Costs
+                        </h4>
+                        <p className="text-sm text-gray-500 line-clamp-3">
+                            Discover the supply chain strategies Austin Habitat used to lower material costs by 15% without sacrificing quality.
+                        </p>
+                    </div>
+                 </div>
+
+                 {/* News Card 3 */}
+                 <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all cursor-pointer group">
+                    <div className="h-40 bg-[#E55025] flex items-center justify-center">
+                        <Shield className="text-white/20" size={48} />
+                    </div>
+                    <div className="p-6">
+                        <div className="flex items-center justify-between mb-3">
+                            <span className="px-2 py-1 bg-orange-50 text-[#E55025] text-[10px] font-bold uppercase rounded-full">Compliance</span>
+                            <span className="text-xs text-gray-400">Oct 24</span>
+                        </div>
+                        <h4 className="font-bold text-[#002F6C] text-lg mb-2 group-hover:text-[#0099CC] transition-colors">
+                            Updated Safety Protocols for Lead Hazard Control
+                        </h4>
+                        <p className="text-sm text-gray-500 line-clamp-3">
+                            Important updates to Policy 33 regarding lead safety. All repair staff must review the new protocols effective immediately.
+                        </p>
+                    </div>
+                 </div>
+            </div>
+        </section>
+
+        {/* NEW: UPCOMING EVENTS & DEADLINES */}
+        <section>
+            <div className="flex items-center justify-between mb-6">
+                <h3 className="text-[#002F6C] font-bold text-2xl flex items-center gap-3">
+                    <Calendar className="text-[#C4D600]" fill="currentColor" /> Events & Deadlines
+                </h3>
+            </div>
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[
+                     { day: "28", month: "OCT", title: "Regional Repair Summit", time: "10:00 AM - 2:00 PM", type: "Conference" },
+                     { day: "02", month: "NOV", title: "Grant Writing Workshop", time: "1:00 PM - 3:00 PM", type: "Training" },
+                     { day: "15", month: "NOV", title: "Quarterly Safety Review", time: "9:00 AM - 10:30 AM", type: "Meeting" },
+                ].map((evt, i) => (
+                    <div key={i} className="flex gap-4 items-start group cursor-pointer p-4 hover:bg-gray-50 rounded-xl transition-colors border border-transparent hover:border-gray-100">
+                        <div className="flex flex-col items-center bg-blue-50 rounded-xl p-3 w-16 shrink-0 group-hover:bg-[#0099CC] group-hover:text-white transition-colors">
+                           <span className="text-[10px] font-bold uppercase tracking-wider">{evt.month}</span>
+                           <span className="text-2xl font-black text-[#002F6C] group-hover:text-white">{evt.day}</span>
                         </div>
                         <div>
-                           <h4 className="font-bold text-sm text-gray-900 group-hover:text-[#0099CC] transition-colors">{evt.title}</h4>
-                           <p className="text-xs text-gray-500 mt-1">{evt.time}</p>
+                           <span className="text-[10px] font-bold text-[#88888D] uppercase tracking-wide">{evt.type}</span>
+                           <h4 className="font-bold text-[#002F6C] text-base group-hover:text-[#0099CC] transition-colors">{evt.title}</h4>
+                           <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                               <Clock size={12}/> {evt.time}
+                           </p>
                         </div>
-                     </div>
-                  ))}
-               </div>
-               <button className="w-full mt-6 py-2 border border-gray-200 rounded text-xs font-bold text-gray-600 hover:border-[#0099CC] hover:text-[#0099CC] transition-colors">
-                  Open Calendar
-               </button>
-            </section>
-
-             {/* MY SITES / PROJECTS */}
-            <section className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-               <h3 className="text-[#002F6C] font-bold text-lg mb-4">Pinned Projects</h3>
-               <div className="space-y-3">
-                  {[
-                     { name: "Greenwood Revitalization", status: "Active" },
-                     { name: "Veteran Home Repair Initiative", status: "Planning" },
-                     { name: "2025 Weatherization Blitz", status: "On Hold" }
-                  ].map((proj, i) => (
-                     <div key={i} className="flex items-center justify-between p-2 hover:bg-gray-50 rounded cursor-pointer group">
-                        <div className="flex items-center gap-3">
-                           <div className="w-2 h-2 rounded-full bg-[#C4D600]"></div>
-                           <span className="text-sm font-medium text-gray-700 group-hover:text-[#0099CC]">{proj.name}</span>
-                        </div>
-                        <ExternalLink size={14} className="text-gray-300 group-hover:text-[#0099CC]" />
-                     </div>
-                  ))}
-               </div>
-            </section>
-
-            {/* HELP CARD */}
-            <div className="bg-[#e6f5fa] rounded-xl p-6 border border-blue-100">
-               <h4 className="font-bold text-[#002F6C] mb-2">Need Help?</h4>
-               <p className="text-xs text-blue-800 mb-4">
-                  Contact the Affiliate Support Center or browse the Knowledge Base for tutorials.
-               </p>
-               <button className="text-xs font-bold text-[#0099CC] hover:underline">Contact Support &rarr;</button>
+                    </div>
+                ))}
             </div>
+        </section>
 
-         </div>
       </div>
     </div>
-  </div>
   );
 };
 
@@ -642,6 +735,7 @@ const AppsView = () => (
          color="bg-[#8179E2]"
          description="Easily build and generate customized Policies and Procedures manuals to structure your program."
          url="https://policy-builder.vercel.app/"
+         isNew={true}
       />
       <AppCard 
          title="Catalog Builder" 
@@ -651,15 +745,15 @@ const AppsView = () => (
          color="bg-[#F88259]"
          description="Create a comprehensive catalog defining your program's specific eligible and non-eligible repair interventions."
          url="https://repairs-catalog.vercel.app/"
+         isNew={true}
       />
       <AppCard 
          title="Readiness Assessment" 
          category="Strategy" 
-         version="New" 
+         version="v1.0" 
          imgSrc="https://github.com/jerryzuniga/Preservation/blob/6955e8ab2a7da593bfb3d30173f758fd10a6f5b8/public/readiness.png?raw=true" 
          color="bg-[#3EA9D5]"
          description="A pre-launch evaluation designed to determine a nonprofit's readiness to start a new home repair program."
-         isNew={true}
          url="https://readiness-app.vercel.app/"
       />
       <AppCard 
