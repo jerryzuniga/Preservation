@@ -64,8 +64,8 @@ const FrameworkRingDiagram = () => (
     <text x="500" y="300" textAnchor="middle" className="font-bold text-xs fill-[#0099CC]" transform="rotate(90, 500, 300)">Owner-Occupied Repairs</text>
     <text x="100" y="300" textAnchor="middle" className="font-bold text-xs fill-[#0099CC]" transform="rotate(-90, 100, 300)">Acquisition Rehabs</text>
 
-    {/* Middle Ring: Strategic Pillars */}
-    <circle cx="300" cy="300" r="200" fill="white" stroke="#C4D600" strokeWidth="24" strokeOpacity="0.8" />
+    {/* Middle Ring: Strategic Pillars - Changed Stroke to Yellow #FFD100 */}
+    <circle cx="300" cy="300" r="200" fill="white" stroke="#FFD100" strokeWidth="24" strokeOpacity="0.8" />
     <text x="300" y="145" textAnchor="middle" className="font-bold text-xs fill-[#88888D]">Dwelling Safety</text>
     <text x="300" y="465" textAnchor="middle" className="font-bold text-xs fill-[#88888D]">Home Performance</text>
     <text x="460" y="305" textAnchor="middle" className="font-bold text-xs fill-[#88888D]">Occupant Health</text>
@@ -74,32 +74,32 @@ const FrameworkRingDiagram = () => (
     {/* Inner Circle: Core Purpose */}
     <circle cx="300" cy="300" r="120" fill="#002F6C" filter="url(#shadow)" />
     <text x="300" y="290" textAnchor="middle" className="font-bold text-lg fill-white">STABILITY</text>
-    <text x="300" y="310" textAnchor="middle" className="font-bold text-sm fill-[#C4D600]">&</text>
+    <text x="300" y="310" textAnchor="middle" className="font-bold text-sm fill-[#FFD100]">&</text>
     <text x="300" y="330" textAnchor="middle" className="font-bold text-lg fill-white">RESILIENCE</text>
   </svg>
 );
 
 // Generational Wealth Chart
 const WealthChart = () => (
-  <svg viewBox="0 0 800 400" className="w-full h-full bg-black/20 rounded-xl p-4 border border-white/10 shadow-inner">
+  <svg viewBox="0 0 800 400" className="w-full h-full bg-[#002F6C] rounded-xl p-4 border border-white/20 shadow-md">
     {/* Grid Lines */}
     <line x1="50" y1="350" x2="750" y2="350" stroke="white" strokeWidth="2" opacity="0.3" /> 
     <line x1="50" y1="50" x2="50" y2="350" stroke="white" strokeWidth="2" opacity="0.3" />
     
     {/* Areas */}
-    <path d="M 50 350 L 750 350 L 750 50 L 50 250 Z" fill="url(#gradientEquity)" opacity="0.2" />
+    <path d="M 50 350 L 750 350 L 750 50 L 50 250 Z" fill="url(#gradientEquity)" opacity="0.3" />
 
     {/* Lines */}
-    {/* Debt Line - Switched to Orange #E55025 for better visibility on dark background */}
+    {/* Debt Line - Orange #E55025 */}
     <path d="M 50 100 C 200 120, 400 180, 600 350" fill="none" stroke="#E55025" strokeWidth="4" strokeDasharray="8 4" />
-    <text x="60" y="90" fill="#E55025" className="text-sm font-bold tracking-wide" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>DEBT (Liability)</text>
+    <text x="60" y="90" fill="#E55025" className="text-sm font-bold tracking-wide">DEBT (Liability)</text>
 
-    {/* Wealth Line - Bright Green #C4D600 */}
-    <path d="M 50 350 C 200 340, 400 200, 750 50" fill="none" stroke="#C4D600" strokeWidth="5" />
-    <text x="700" y="40" fill="#C4D600" className="text-sm font-bold tracking-wide" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>WEALTH (Asset)</text>
+    {/* Wealth Line - Changed to Yellow #FFD100 */}
+    <path d="M 50 350 C 200 340, 400 200, 750 50" fill="none" stroke="#FFD100" strokeWidth="5" />
+    <text x="700" y="40" fill="#FFD100" className="text-sm font-bold tracking-wide">WEALTH (Asset)</text>
 
     {/* Markers */}
-    <g className="font-medium text-xs" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
+    <g className="font-medium text-xs">
         <circle cx="50" cy="350" r="6" fill="white" />
         <text x="50" y="380" fill="white" textAnchor="middle">Day 1</text>
         
@@ -109,14 +109,14 @@ const WealthChart = () => (
         <circle cx="500" cy="150" r="6" fill="white" />
         <text x="500" y="380" fill="white" textAnchor="middle">Yrs 20-25</text>
         
-        <circle cx="750" cy="50" r="8" fill="#C4D600" stroke="white" strokeWidth="2" />
+        <circle cx="750" cy="50" r="8" fill="#FFD100" stroke="white" strokeWidth="2" />
         <text x="750" y="380" fill="white" textAnchor="middle">Transfer</text>
     </g>
 
     <defs>
       <linearGradient id="gradientEquity" x1="0" y1="1" x2="1" y2="0">
-        <stop offset="0%" stopColor="#C4D600" stopOpacity="0" />
-        <stop offset="100%" stopColor="#C4D600" stopOpacity="0.4" />
+        <stop offset="0%" stopColor="#FFD100" stopOpacity="0" />
+        <stop offset="100%" stopColor="#FFD100" stopOpacity="0.3" />
       </linearGradient>
     </defs>
   </svg>
@@ -164,7 +164,7 @@ const PlaybookContent = () => {
           </div>
           <h1 className="text-4xl md:text-6xl font-black text-black mb-6 tracking-tight leading-tight">
             Preserving Homes,<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0099CC] to-[#C4D600]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0099CC] to-[#FFD100]">
               Strengthening Communities.
             </span>
           </h1>
@@ -179,7 +179,7 @@ const PlaybookContent = () => {
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-[#002F6C] mb-4">Why Housing Preservation Matters</h2>
-            <div className="w-20 h-1 bg-[#C4D600] mx-auto rounded-full"></div>
+            <div className="w-20 h-1 bg-[#FFD100] mx-auto rounded-full"></div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 items-stretch mb-16">
@@ -195,10 +195,10 @@ const PlaybookContent = () => {
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center text-xs text-[#88888D]">
-                    <CheckCircle size={14} className="text-[#C4D600] mr-2" /> Critical Home Repair
+                    <CheckCircle size={14} className="text-[#FFD100] mr-2" /> Critical Home Repair
                   </li>
                   <li className="flex items-center text-xs text-[#88888D]">
-                    <CheckCircle size={14} className="text-[#C4D600] mr-2" /> Aging in Place
+                    <CheckCircle size={14} className="text-[#FFD100] mr-2" /> Aging in Place
                   </li>
                 </ul>
               </div>
@@ -227,16 +227,16 @@ const PlaybookContent = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-[#002F6C] text-white p-6 rounded-xl text-center">
-              <div className="text-3xl font-black mb-1 text-[#C4D600]">$126.9B</div>
+            <div className="bg-[#0099CC] text-white p-6 rounded-xl text-center">
+              <div className="text-3xl font-black mb-1 text-[#FFD100]">$126.9B</div>
               <p className="text-blue-100 text-xs font-medium uppercase tracking-wide">Repair Need</p>
             </div>
-            <div className="bg-[#002F6C] text-white p-6 rounded-xl text-center">
-              <div className="text-3xl font-black mb-1 text-[#C4D600]">35 Million</div>
+            <div className="bg-[#0099CC] text-white p-6 rounded-xl text-center">
+              <div className="text-3xl font-black mb-1 text-[#FFD100]">35 Million</div>
               <p className="text-blue-100 text-xs font-medium uppercase tracking-wide">Homes at Risk</p>
             </div>
-            <div className="bg-[#002F6C] text-white p-6 rounded-xl text-center">
-              <div className="text-3xl font-black mb-1 text-[#C4D600]">833%</div>
+            <div className="bg-[#0099CC] text-white p-6 rounded-xl text-center">
+              <div className="text-3xl font-black mb-1 text-[#FFD100]">833%</div>
               <p className="text-blue-100 text-xs font-medium uppercase tracking-wide">Growth in 10 Yrs</p>
             </div>
           </div>
@@ -254,9 +254,9 @@ const PlaybookContent = () => {
               <div className="space-y-3">
                 {[
                   { title: "Centered", desc: "Housing Preservation as a Key Tool", color: "border-l-[#0099CC]" },
-                  { title: "Sustainable", desc: "Effective, Financially Sustainable Programming", color: "border-l-[#C4D600]" },
+                  { title: "Sustainable", desc: "Effective, Financially Sustainable Programming", color: "border-l-[#FFD100]" },
                   { title: "Holistic", desc: "Consistent, Clear and Robust Connections", color: "border-l-[#0099CC]" },
-                  { title: "Innovative", desc: "Foster Innovation and Program Excellence", color: "border-l-[#C4D600]" },
+                  { title: "Innovative", desc: "Foster Innovation and Program Excellence", color: "border-l-[#FFD100]" },
                   { title: "Influential", desc: "Move Intentionally Toward Thought Leadership", color: "border-l-[#0099CC]" },
                 ].map((goal, index) => (
                   <div key={index} className={`bg-white p-4 rounded-lg shadow-sm border border-gray-100 border-l-4 ${goal.color}`}>
@@ -269,7 +269,7 @@ const PlaybookContent = () => {
 
             <div className="md:w-1/2 flex flex-col items-center justify-center">
               <div className="bg-white p-6 rounded-3xl shadow-lg border border-slate-100 w-full relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#0099CC] to-[#C4D600]"></div>
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#0099CC] to-[#FFD100]"></div>
                 <h3 className="text-center text-lg font-bold text-[#002F6C] mb-6 uppercase tracking-wider">Strategic Framework</h3>
                 <FrameworkRingDiagram />
               </div>
@@ -282,31 +282,31 @@ const PlaybookContent = () => {
       <section id="pb-priorities" className="py-16 bg-[#000000] text-white">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
-            <span className="text-[#C4D600] font-bold tracking-wider uppercase text-xs">Action Plan</span>
+            <span className="text-[#FFD100] font-bold tracking-wider uppercase text-xs">Action Plan</span>
             <h2 className="text-3xl font-black mt-2 text-white">6 Key Priorities</h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-4">
             {[
-              { title: "1. Build Network Capacity", icon: <Users className="text-[#C4D600]" /> },
-              { title: "2. Sustainable Funding", icon: <DollarSign className="text-[#C4D600]" /> },
-              { title: "3. Disaster Programming", icon: <AlertTriangle className="text-[#C4D600]" /> },
-              { title: "4. Measure Housing Quality", icon: <Activity className="text-[#C4D600]" /> },
-              { title: "5. Center Targeted Outcomes", icon: <Heart className="text-[#C4D600]" /> },
-              { title: "6. Vacant Housing Needs", icon: <Home className="text-[#C4D600]" /> }
+              { title: "1. Build Network Capacity", icon: <Users className="text-[#FFD100]" /> },
+              { title: "2. Sustainable Funding", icon: <DollarSign className="text-[#FFD100]" /> },
+              { title: "3. Disaster Programming", icon: <AlertTriangle className="text-[#FFD100]" /> },
+              { title: "4. Measure Housing Quality", icon: <Activity className="text-[#FFD100]" /> },
+              { title: "5. Center Targeted Outcomes", icon: <Heart className="text-[#FFD100]" /> },
+              { title: "6. Vacant Housing Needs", icon: <Home className="text-[#FFD100]" /> }
             ].map((priority, i) => (
-              <div key={i} className="bg-[#222222] p-6 rounded-xl border border-[#444444] hover:border-[#C4D600] transition-all">
+              <div key={i} className="bg-[#222222] p-6 rounded-xl border border-[#444444] hover:border-[#FFD100] transition-all">
                 <div className="mb-3">{priority.icon}</div>
                 <h3 className="font-bold text-sm text-white">{priority.title}</h3>
               </div>
             ))}
           </div>
 
-          <div className="mt-12 bg-gradient-to-r from-[#002F6C] to-[#004e7c] rounded-2xl p-8 relative overflow-hidden border border-[#0099CC]/30">
+          <div className="mt-12 bg-gradient-to-r from-[#0099CC] to-[#007AA3] rounded-2xl p-8 relative overflow-hidden border border-[#0099CC]/30">
             <div className="flex flex-col lg:flex-row gap-8 items-center">
               <div className="lg:w-1/2">
-                <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
-                  <TrendingUp className="text-[#C4D600]" size={24} />
+                <h3 className="text-xl font-bold mb-2 flex items-center gap-2 text-white">
+                  <TrendingUp className="text-[#FFD100]" size={24} />
                   Generational Wealth
                 </h3>
                 <p className="text-blue-100 text-sm mb-4">
@@ -315,7 +315,7 @@ const PlaybookContent = () => {
                 <div className="flex gap-2">
                   <span className="px-3 py-1 bg-white/10 rounded-full text-xs text-blue-100 border border-white/20">Debt</span>
                   <span className="px-3 py-1 bg-white/10 rounded-full text-xs text-blue-100 border border-white/20">Equity</span>
-                  <span className="px-3 py-1 bg-[#C4D600]/20 text-[#C4D600] rounded-full text-xs border border-[#C4D600]/30">Wealth Transfer</span>
+                  <span className="px-3 py-1 bg-[#FFD100]/20 text-[#FFD100] rounded-full text-xs border border-[#FFD100]/30">Wealth Transfer</span>
                 </div>
               </div>
               <div className="lg:w-1/2 w-full h-48">
@@ -342,9 +342,9 @@ const QuickLinkCard = ({ title, imgSrc, color, onClick, isNew, isComingSoon }) =
         : 'hover:shadow-md hover:border-[#0099CC] cursor-pointer'
     }`}
   >
-    {/* Status Badges */}
+    {/* Status Badges - Yellow for New */}
     {isNew && (
-      <span className="absolute top-2 right-2 px-2 py-0.5 bg-[#C4D600] text-[#002F6C] text-[9px] font-bold uppercase rounded-full shadow-sm z-10 animate-pulse">
+      <span className="absolute top-2 right-2 px-2 py-0.5 bg-[#FFD100] text-[#002F6C] text-[9px] font-bold uppercase rounded-full shadow-sm z-10 animate-pulse">
         New
       </span>
     )}
@@ -417,20 +417,20 @@ const HomeView = ({ onNavigate }) => {
   return (
   <div className="bg-gray-50/50 min-h-full pb-12">
     
-    {/* HERO SECTION - SharePoint Style */}
-    <div className="relative bg-[#002F6C] h-64 w-full overflow-hidden shrink-0">
+    {/* HERO SECTION - SharePoint Style (BRIGHTER) */}
+    <div className="relative bg-[#0099CC] h-64 w-full overflow-hidden shrink-0">
        {/* Abstract background elements */}
-       <div className="absolute inset-0 bg-gradient-to-r from-[#002F6C] via-[#002F6C] to-[#0099CC] opacity-90"></div>
-       <div className="absolute -right-20 -top-20 w-96 h-96 bg-[#C4D600] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-       <div className="absolute left-10 bottom-0 w-64 h-64 bg-[#0099CC] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+       <div className="absolute inset-0 bg-gradient-to-r from-[#0099CC] to-[#007AA3] opacity-90"></div>
+       <div className="absolute -right-20 -top-20 w-96 h-96 bg-[#FFD100] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+       <div className="absolute left-10 bottom-0 w-64 h-64 bg-[#002F6C] rounded-full mix-blend-multiply filter blur-3xl opacity-10"></div>
        
        <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
           <div className="flex flex-col justify-center max-w-2xl">
             <div className="flex items-center gap-2 mb-2">
-              <span className="px-2 py-0.5 rounded bg-[#C4D600] text-[#002F6C] text-[10px] font-bold uppercase tracking-wide">Internal Portal</span>
+              <span className="px-2 py-0.5 rounded bg-[#FFD100] text-[#002F6C] text-[10px] font-bold uppercase tracking-wide">Internal Portal</span>
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">{greeting}, Affiliate Leader</h1>
-            <p className="text-blue-100 max-w-xl text-base md:text-lg font-light">
+            <p className="text-blue-50 max-w-xl text-base md:text-lg font-light">
               Welcome to the PreservationHub. Access your tools, track network news, and align with the national housing preservation strategy.
             </p>
           </div>
@@ -438,7 +438,7 @@ const HomeView = ({ onNavigate }) => {
           {/* Large Hero Logo */}
           <div className="hidden md:flex items-center justify-center pr-8">
              <div className="relative group">
-                <div className="absolute inset-0 bg-[#C4D600] rounded-full blur-2xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                <div className="absolute inset-0 bg-[#FFD100] rounded-full blur-2xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
                 <div className="bg-white p-6 rounded-full shadow-2xl relative z-10 transform group-hover:scale-105 transition-transform duration-500">
                   <img 
                     src="https://github.com/jerryzuniga/Preservation/blob/90c1156da350793419c1e61644c4165d8b30b30d/public/hub.png?raw=true" 
@@ -501,69 +501,69 @@ const HomeView = ({ onNavigate }) => {
         </div>
       </section>
 
-      {/* NEW: GENERATIONAL WEALTH SECTION (Replaces Framework) */}
-        <section className="bg-gradient-to-r from-[#002F6C] to-[#004e7c] rounded-2xl p-8 shadow-lg relative overflow-hidden border border-[#0099CC]/30">
-            <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl"></div>
+      {/* NEW: GENERATIONAL WEALTH SECTION (Replaces Framework) - BRIGHTER BG */}
+        <section className="bg-gradient-to-r from-[#0099CC] to-[#007AA3] rounded-2xl p-8 shadow-lg relative overflow-hidden border border-[#0099CC]/30">
+            <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl"></div>
             <div className="relative z-10 flex flex-col md:flex-row items-center gap-12">
                 <div className="md:w-1/2 space-y-6">
                     <h2 className="text-3xl font-bold text-white flex items-center gap-3">
-                        <TrendingUp className="text-[#C4D600]" size={32} />
+                        <TrendingUp className="text-[#FFD100]" size={32} />
                         Homes as Generational Wealth
                     </h2>
-                    <p className="text-blue-100 leading-relaxed">
+                    <p className="text-blue-50 leading-relaxed">
                         A home is more than shelter; it is a financial asset. But affordable homeownership does not equal instant wealth. It requires time, consistency, and <strong>preservation</strong> to move from debt to equity.
                     </p>
                     <div className="flex flex-wrap gap-3">
                         <div className="bg-white/10 px-4 py-2 rounded-lg backdrop-blur-sm border border-white/20">
-                            <span className="block text-[10px] text-blue-200 uppercase tracking-wider font-bold">Stage 1</span>
+                            <span className="block text-[10px] text-blue-100 uppercase tracking-wider font-bold">Stage 1</span>
                             <span className="font-bold text-white text-sm">Greatest Debt</span>
                         </div>
                         <div className="bg-white/10 px-4 py-2 rounded-lg backdrop-blur-sm border border-white/20">
-                            <span className="block text-[10px] text-blue-200 uppercase tracking-wider font-bold">Stage 2</span>
+                            <span className="block text-[10px] text-blue-100 uppercase tracking-wider font-bold">Stage 2</span>
                             <span className="font-bold text-white text-sm">Equity Build</span>
                         </div>
-                        <div className="bg-[#C4D600] px-4 py-2 rounded-lg shadow-lg text-[#002F6C]">
+                        <div className="bg-[#FFD100] px-4 py-2 rounded-lg shadow-lg text-[#002F6C]">
                             <span className="block text-[10px] uppercase tracking-wider font-bold opacity-80">Goal</span>
                             <span className="font-bold text-sm">Realized Wealth</span>
                         </div>
                     </div>
-                    <button onClick={() => onNavigate('learn')} className="text-white/80 font-bold text-sm hover:text-white hover:underline flex items-center gap-2 mt-4">
+                    <button onClick={() => onNavigate('learn')} className="text-white/90 font-bold text-sm hover:text-white hover:underline flex items-center gap-2 mt-4">
                         Read the full strategy <ArrowRight size={16}/>
                     </button>
                 </div>
-                <div className="md:w-1/2 w-full h-64 bg-white/5 rounded-xl p-4 border border-white/10">
+                <div className="md:w-1/2 w-full h-64 bg-black/10 rounded-xl p-4 border border-white/20">
                     <WealthChart />
-                    <p className="text-center text-xs text-blue-200 mt-2 italic">
+                    <p className="text-center text-xs text-blue-100 mt-2 italic">
                         Visualizing the journey from Liability to Asset Transfer
                     </p>
                 </div>
             </div>
         </section>
 
-        {/* NEW: IMPACT METRICS */}
+        {/* NEW: IMPACT METRICS - BRIGHTER */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-[#002F6C] text-white p-8 rounded-2xl text-center shadow-lg relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+            <div className="bg-[#0099CC] text-white p-8 rounded-2xl text-center shadow-lg relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
                 <div className="relative z-10">
-                    <div className="text-4xl font-black mb-2 text-[#C4D600]">$126.9B</div>
-                    <p className="text-blue-100 text-sm font-medium uppercase tracking-wide">Repair Need</p>
-                    <p className="text-blue-200/60 text-xs mt-2">Estimated cost to address disrepair in existing U.S. housing.</p>
+                    <div className="text-4xl font-black mb-2 text-[#FFD100]">$126.9B</div>
+                    <p className="text-blue-50 text-sm font-medium uppercase tracking-wide">Repair Need</p>
+                    <p className="text-blue-100/80 text-xs mt-2">Estimated cost to address disrepair in existing U.S. housing.</p>
                 </div>
             </div>
-            <div className="bg-[#002F6C] text-white p-8 rounded-2xl text-center shadow-lg relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+            <div className="bg-[#0099CC] text-white p-8 rounded-2xl text-center shadow-lg relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
                 <div className="relative z-10">
-                    <div className="text-4xl font-black mb-2 text-[#C4D600]">35 Million</div>
-                    <p className="text-blue-100 text-sm font-medium uppercase tracking-wide">Homes at Risk</p>
-                    <p className="text-blue-200/60 text-xs mt-2">U.S. homes placing occupants at potential health & safety risk.</p>
+                    <div className="text-4xl font-black mb-2 text-[#FFD100]">35 Million</div>
+                    <p className="text-blue-50 text-sm font-medium uppercase tracking-wide">Homes at Risk</p>
+                    <p className="text-blue-100/80 text-xs mt-2">U.S. homes placing occupants at potential health & safety risk.</p>
                 </div>
             </div>
-            <div className="bg-[#002F6C] text-white p-8 rounded-2xl text-center shadow-lg relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+            <div className="bg-[#0099CC] text-white p-8 rounded-2xl text-center shadow-lg relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
                 <div className="relative z-10">
-                    <div className="text-4xl font-black mb-2 text-[#C4D600]">833%</div>
-                    <p className="text-blue-100 text-sm font-medium uppercase tracking-wide">Growth in 10 Yrs</p>
-                    <p className="text-blue-200/60 text-xs mt-2">Increase in Habitat Repairs production over the last decade.</p>
+                    <div className="text-4xl font-black mb-2 text-[#FFD100]">833%</div>
+                    <p className="text-blue-50 text-sm font-medium uppercase tracking-wide">Growth in 10 Yrs</p>
+                    <p className="text-blue-100/80 text-xs mt-2">Increase in Habitat Repairs production over the last decade.</p>
                 </div>
             </div>
         </section>
@@ -572,14 +572,14 @@ const HomeView = ({ onNavigate }) => {
         <section>
             <div className="flex items-center justify-between mb-6">
                 <h3 className="text-[#002F6C] font-bold text-2xl flex items-center gap-3">
-                    <Star className="text-[#C4D600]" fill="currentColor" /> Network News
+                    <Star className="text-[#FFD100]" fill="currentColor" /> Network News
                 </h3>
                 <button className="text-sm font-semibold text-[#88888D] hover:text-[#0099CC]">View Archive</button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                  {/* News Card 1 */}
                  <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all cursor-pointer group">
-                    <div className="h-40 bg-[#002F6C] flex items-center justify-center">
+                    <div className="h-40 bg-[#0099CC] flex items-center justify-center">
                         <MessageSquare className="text-white/20" size={48} />
                     </div>
                     <div className="p-6">
@@ -598,7 +598,7 @@ const HomeView = ({ onNavigate }) => {
 
                  {/* News Card 2 */}
                  <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all cursor-pointer group">
-                    <div className="h-40 bg-[#0099CC] flex items-center justify-center">
+                    <div className="h-40 bg-[#007AA3] flex items-center justify-center">
                         <TrendingUp className="text-white/20" size={48} />
                     </div>
                     <div className="p-6">
@@ -640,7 +640,7 @@ const HomeView = ({ onNavigate }) => {
         <section>
             <div className="flex items-center justify-between mb-6">
                 <h3 className="text-[#002F6C] font-bold text-2xl flex items-center gap-3">
-                    <Calendar className="text-[#C4D600]" fill="currentColor" /> Events & Deadlines
+                    <Calendar className="text-[#FFD100]" fill="currentColor" /> Events & Deadlines
                 </h3>
             </div>
             <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -683,7 +683,7 @@ const AppCard = ({ title, category, version, imgSrc, color, description, isNew =
            <img src={imgSrc} alt={title} className="w-full h-full object-cover" />
         </div>
         {isNew && (
-           <span className="px-2 py-1 bg-[#C4D600] text-[#002F6C] text-[10px] font-bold uppercase rounded-full">New</span>
+           <span className="px-2 py-1 bg-[#FFD100] text-[#002F6C] text-[10px] font-bold uppercase rounded-full">New</span>
         )}
       </div>
       
@@ -830,9 +830,9 @@ const SidebarItem = ({ icon, label, id, active, onClick }) => (
       active ? 'bg-[#0099CC] shadow-md' : 'hover:bg-gray-50'
     }`}
   >
-    {/* Active Indicator */}
+    {/* Active Indicator - Yellow #FFD100 */}
     {active && (
-      <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-[#C4D600]"></div>
+      <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-[#FFD100]"></div>
     )}
     
     <div className={`mb-1.5 transition-transform group-hover:scale-110 ${active ? 'text-white' : 'text-[#88888D] group-hover:text-[#0099CC]'}`}>
